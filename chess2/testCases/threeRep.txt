@@ -1,0 +1,12 @@
+Play
+E2 E4
+B8 C6
+B1 C3
+C6 B8
+C3 B1
+B8 C6
+B1 C3
+C6 B8
+C3 B1
+Quit
+Quit
