@@ -16,8 +16,8 @@ void optionsPage(string optionTag, string gameMode, string opponent,
                 int botColor){
     cout << "\n\n";
     cout << "Options (Select one of the five below)\n\n\n";
-    cout << "Quit\t\t\t-\tExit Program\n\n\n";
-    cout << "Customize Colors\t-\tAdjust colors of Board and Pieces\n\n\n";
+    cout << "Quit\t\t\t-\tExit the Program\n\n\n";
+    cout << "Customize Colors\t-\tAdjust colors of board and pieces\n\n\n";
     cout << "Set Gamemode\t\t-\tCurrent Gamemode: " << gameMode << "\n\n\n";
     cout << "Choose Player\t\t-\tCurrent Opponent: " << opponent << endl;
     if(botColor){
