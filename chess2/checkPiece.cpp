@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include "termfuncs.h"
+#include <regex> 
+
 using namespace std;
 
 checkPiece::checkPiece(piece * givenB[][8], string pess){
@@ -28,15 +30,14 @@ void checkPiece::translateMove(string theMove){
 bool checkPiece::legal(string theMove, bool turn, bool castle[], bool botMove){
     if(botMove){
         return true;
-    } 
-    if((theMove[2] != ' ') or (theMove.length() != 5)){
-        errMess = "Not a legal command";
-        return false;
     }
-    if ((theMove[0] < 'A' or theMove[0] > 'H') or (theMove[1] < '1' or 
-        theMove[1] > '8') or (theMove[3] < 'A' or theMove[3] > 'H') or 
-        (theMove[4] < '1' or theMove[4] > '8')) {
-        errMess = "Square not on board";
+    regex movePattern("[A-H][1-8] [A-H][1-8]");
+    if (!regex_match(theMove, movePattern)){
+        if((theMove[2] != ' ') or (theMove.length() != 5)){
+            errMess = "Not a legal command";
+        } else {
+            errMess = "Square not on board";
+        }
         return false;
     }
     translateMove(theMove);
