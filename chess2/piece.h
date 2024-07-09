@@ -7,7 +7,7 @@ using namespace std;
 
 class piece
 {
-    //TODO: Subclasses for rook, knight, bish, king, queen, space
+  
     public: 
         // piece();
         int player;

@@ -19,9 +19,6 @@ class rook : public piece
         static bool horiz(int from1, int from2, int to1, piece * board[][8]);
         static bool vert(int from1, int from2, int to2, piece * board[][8]);
         void undoSpace();
-    private: 
-        void canMoveHelper(int i, int j, bool turn, int t1, int t2, 
-                        vector <string>& possibleMoves, piece * board[][8]);
 
 };
 

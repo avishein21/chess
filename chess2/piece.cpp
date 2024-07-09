@@ -52,7 +52,6 @@ piece::~piece(){
     //empty
 }
 
-
 Space::Space(){
     player = 2;
     name = '.'; 

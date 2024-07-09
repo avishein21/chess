@@ -16,9 +16,10 @@ CXXFLAGS = -g3 -Wall -Wextra -Wpedantic -Wshadow -O2 -std=c++11
 
 
 Chess: play.o board.o termfuncs.o checkPiece.o knight.o rook.o bish.o \
-	setBoard.o piece.o queen.o pawn.o king.o piecePage.o fen.o
+	setBoard.o piece.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o Play play.o board.o termfuncs.o checkPiece.o \
-	knight.o setBoard.o piece.o rook.o bish.o queen.o pawn.o king.o piecePage.o fen.o
+	knight.o setBoard.o piece.o rook.o bish.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o
+
 Unit_tests: test_unit.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o Unit_tests test_unit.o 
 
@@ -49,7 +50,10 @@ termfuncs.o: termfuncs.cpp termfuncs.h
 knight.o: knight.cpp knight.h piece.h
 	$(CXX) $(CXXFLAGS) -c knight.cpp 
 
-rook.o: rook.cpp rook.h piece.h
+rqbHelper.o: rqbHelper.cpp rqbHelper.h piece.h 
+	$(CXX) $(CXXFLAGS) -c rqbHelper.cpp  
+
+rook.o: rook.cpp rook.h piece.h 
 	$(CXX) $(CXXFLAGS) -c rook.cpp 
 
 bish.o: bish.cpp bish.h piece.h
@@ -66,6 +70,8 @@ king.o: king.cpp king.h piece.h
 
 piece.o: piece.cpp piece.h 
 	$(CXX) $(CXXFLAGS) -c piece.cpp 
+
+
 
 
 # remove executables, object code, and temporary files from the current folder 

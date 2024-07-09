@@ -80,6 +80,7 @@ bool checkPiece::legal(string theMove, bool turn, bool castle[], bool botMove){
     return true;
 }
 
+// Checks if legal move for piece type
 bool checkPiece::pieceMove(piece * test, bool castle[]){
     //fill in passant
     if (test->move(from1, from2, to1, to2, board, "", castle)){

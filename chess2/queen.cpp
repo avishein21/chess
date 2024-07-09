@@ -3,6 +3,7 @@
 #include "bish.h"
 #include <iostream>
 #include <stdio.h>
+#include "rqbHelper.h"
 using namespace std;
 
 queen::queen(bool color){
@@ -39,8 +40,13 @@ bool queen::canCheck(int f1, int f2, piece * board[][8]){
 }
 
 vector <string> queen::canMove(int i, int j, bool turn, piece * board[][8]){
-    vector <string> possibleMoves;
-    return possibleMoves;
+    vector <string> allMoves;
+	if(name == '.'){ return allMoves; }
+    vector <string> bMoves;
+    allMoves = rqbHelper::allRook(i, j, turn, board);
+    bMoves = rqbHelper::allBish(i, j, turn, board);
+    allMoves.insert(allMoves.end(), bMoves.begin(), bMoves.end());
+    return allMoves;
 }
 
 void queen::undoSpace(){

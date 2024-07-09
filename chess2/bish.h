@@ -18,9 +18,6 @@ class bish : public piece
         static bool canCheckQ(int f1, int f2, piece * board[][8]);
         static bool rightDiag(int f1, int f2, int t2, piece * board[][8]);
         static bool leftDiag(int f1, int f2, int t2, piece * board[][8]);
-    private:
-        void moveHelper(int i, int j, bool turn, int t1, int t2, 
-                            vector <string>& possibleMoves, piece * board[][8]);
 };
 
 #endif
