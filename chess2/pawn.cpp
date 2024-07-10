@@ -60,17 +60,6 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     return possibleMoves;  
 }
 
-bool pawn::canCheck(int f1, int f2, piece * board[][8]){
-	int pl = board[f1][f2]->player;
-	if (pl == 1){
-		return whiteCanCheck(f1, f2, board);
-	} else if (pl == 0) {
-		return blackCanCheck(f1, f2, board);
-	} else {
-		return false;
-	}
-}
-
 bool pawn::whiteMove(int f1, int f2, int t1, int t2, piece * board[][8], 
 					string pessSquare){
 	// one space
@@ -153,38 +142,6 @@ bool pawn::checkPessant(int t1, int t2, string pessSquare){
 	if (checkSquare == pessSquare){
 		return true;
 	}
-	return false;
-}
-
-bool pawn::whiteCanCheck(int f1, int f2, piece * board[][8]){
-	if((f2 - 1) >= 0){
-        piece * testL = board[f1 - 1][f2 - 1];
-        if ((testL->name == 'K') and (testL->player == 0)){
-            return true;
-        }
-	}
-	if((f2 + 1) <= 7){
-        piece * testR = board[f1 - 1][f2 + 1];
-        if ((testR->name == 'K') and (testR->player == 0)){
-            return true;
-        }
-    }
-	return false;
-}
-
-bool pawn::blackCanCheck(int f1, int f2, piece * board[][8]){
-    	if((f2 - 1) >= 0){
-        piece * testL = board[f1 + 1][f2 - 1];
-        if ((testL->name == 'K') and (testL->player == 1)){
-            return true;
-        }
-	}
-	if((f2 + 1) <= 7){
-        piece * testR = board[f1 + 1][f2 + 1];
-        if ((testR->name == 'K') and (testR->player == 1)){
-            return true;
-        }
-    }
 	return false;
 }
 

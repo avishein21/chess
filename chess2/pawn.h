@@ -13,11 +13,8 @@ class pawn : public piece
         bool move(int from1, int from2, int to1, int to2, piece * board[][8], 
                           string p, bool castle[]);
         vector <string> canMove(int i, int j, bool turn, piece * board[][8]);
-        bool canCheck(int f1, int f2, piece * board[][8]);
         void undoSpace();
     private:
-        bool whiteCanCheck(int f1, int f2, piece * board[][8]);
-        bool blackCanCheck(int f1, int f2, piece * board[][8]);
         bool whiteMove(int f1, int f2, int t1, int t2, piece * board[][8], 
                         string pessSquare);
         bool blackMove(int f1, int f2, int t1, int t2, piece * board[][8], 

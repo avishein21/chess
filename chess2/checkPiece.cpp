@@ -55,17 +55,17 @@ bool checkPiece::legal(string theMove, bool turn, bool castle[], bool botMove){
     }
     piece * fromP = board[from2][from1];
     bool toSpace = (board[to2][to1]->name == '.'); 
+    //check legal move for piece
     if (!pieceMove(fromP, castle)){
         return false;
     }
-    //check legal move for piece
     if (board[to2][to1]->player == fromP->player){
         errMess = "Players cannot take their own pieces";
         return false;
     }
     //Make move on the temporary board
     makeMove(theMove, board, castle, false, thm, "Classic");
-    //See if current board state will allow the player moving to be checked
+    //See if current board state will allows king capture
     if(canCheck(turn)){
         if(!toSpace){
             board[from2][from1]->undoSpace();
@@ -117,7 +117,7 @@ bool checkPiece::pieceMove(piece * test, bool castle[]){
 //     }
 // }
 
-//Make move and returns piece to delete
+//Make move on real board
 void checkPiece::makeMove(string theMove, piece * realBoard[][8], bool castle[], 
                             bool comments, string theme[], string gameMode){
     (void) castle;
@@ -235,16 +235,14 @@ bool checkPiece::canMove(bool turn){
     return false;
 }
 
-// TODO: UPDATE FUNC
 // Sees if king can be taken in current board
 bool checkPiece::canCheck(bool turn){
     piece * temp;
     for (int i = 0; i < 64; i++){
         temp = board[i / 8][i % 8];
-        // !turn removeable?
-        if (((temp->name != '.') and (temp->player != turn)) and 
-            (temp->canCheck(i / 8, i % 8, board))){
-            return true;
+        // find moved players king, and check if it can be checked
+        if ((temp->name == 'K') and (temp->player == turn)){
+            return (temp->canCheck(i / 8, i % 8, board));
         }
     }
     return false;

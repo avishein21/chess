@@ -38,57 +38,6 @@ vector <string> rook::canMove(int i, int j, bool turn, piece * board[][8]){
     return rqbHelper::allRook(i, j, turn, board);
 }
 
-bool rook::canCheck(int f1, int f2, piece * board[][8]){
-    return canCheckQ(f1, f2, board);
-}
-
-bool rook::canCheckQ(int f1, int f2, piece * board[][8]){
-    int opp = board[f1][f2]->player;
-    int up = 1, down = 1, left = 1, right = 1;
-    // make a function? 
-    while(f1 - up >= 0){
-        piece * test = board[f1 - up][f2];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        up++;
-    }
-    while(f1 + down < 8){
-        piece * test = board[f1 + down][f2];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        down++;
-    }
-    while(f2 + right < 8){
-        piece * test = board[f1][f2 + right];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        right++;
-    }
-    while(f2 - left >= 0){
-        piece * test = board[f1][f2 - left];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        left++;
-    }
-    return false;
-}
-
 //Checks if the rook can make a vertical move
 bool rook::vert(int f1, int f2, int t2, piece * board[][8]){
     if (f2 > t2){

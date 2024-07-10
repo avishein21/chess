@@ -52,6 +52,83 @@ bool king::move(int f1, int f2, int t1, int t2, piece * board[][8],
     // }
 }
 
+// Sees if king can be taken by opposition
+bool king::canCheck(int p1, int p2, piece * board[][8]){
+    int turn = board[p1][p2]->player;    
+    return (pawnCheck(p1, p2, board, turn) || knightCheck(p1, p2, board, turn) || 
+            kingCheck(p1, p2, board, turn) || rookCheck(p1, p2, board, turn)   ||
+            bishCheck(p1, p2, board, turn));
+}
+
+bool king::rookCheck(int p1, int p2, piece * board[][8], int turn){
+    return  (rbqHelper(p1, p2, board, turn, 1, 0, 'R') || 
+            rbqHelper(p1, p2, board, turn, -1, 0, 'R') ||
+            rbqHelper(p1, p2, board, turn, 0, 1, 'R')  ||
+            rbqHelper(p1, p2, board, turn, 0, -1, 'R'));
+}
+
+bool king::bishCheck(int p1, int p2, piece * board[][8], int turn){
+    return  (rbqHelper(p1, p2, board, turn, 1, 1, 'B') || 
+            rbqHelper(p1, p2, board, turn, -1, -1, 'B') ||
+            rbqHelper(p1, p2, board, turn, -1, 1, 'B')  ||
+            rbqHelper(p1, p2, board, turn, 1, -1, 'B'));
+}
+
+bool king::rbqHelper(int p1, int p2, piece * board[][8], int turn, int d1, int d2, char c){
+    p1 += d1;
+    p2 += d2;
+    while ((p2 >= 0) && (p2 < 8) && (p1 >= 0) && (p1 < 8)) {
+        piece *temp = board[p1][p2];
+        if (temp->player != 2){
+            if (((temp->name == 'Q') || (temp->name == c)) and (temp->player != turn)){
+                return true;
+            }
+            return false;
+        }
+        p1 += d1;
+        p2 += d2;
+    }
+    return false;
+}
+
+bool king::pawnCheck(int p1, int p2, piece * board[][8], int turn){
+    // White
+    if (turn){
+        return (pieceCheckHelp(p1 - 1, p2 + 1, board, turn, 'P')) || (pieceCheckHelp(p1 - 1, p2 - 1, board, turn, 'P'));
+    // Black
+    } else {
+        return (pieceCheckHelp(p1 + 1, p2 + 1, board, turn, 'P')) || (pieceCheckHelp(p1 + 1, p2 - 1, board, turn, 'P'));
+    }
+}
+
+bool king::kingCheck(int p1, int p2, piece * board[][8], int turn){
+    for (int i = -1; i < 2; i++){
+        for(int j = -1; j < 2; j++){
+            if (!((i == 0) && (j == 0)) && (pieceCheckHelp(p1 + i, p2 + j, board, turn, 'K'))){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool king::knightCheck(int p1, int p2, piece * board[][8], int turn){
+    return 
+       (pieceCheckHelp(p1 - 1, p2 + 2, board, turn, 'N') || 
+        pieceCheckHelp(p1 - 1, p2 - 2, board, turn, 'N') ||
+        pieceCheckHelp(p1 + 1, p2 + 2, board, turn, 'N') ||
+        pieceCheckHelp(p1 + 1, p2 - 2, board, turn, 'N') ||
+        pieceCheckHelp(p1 - 2, p2 + 1, board, turn, 'N') ||
+        pieceCheckHelp(p1 - 2, p2 - 1, board, turn, 'N') ||
+        pieceCheckHelp(p1 + 2, p2 + 1, board, turn, 'N') ||
+        pieceCheckHelp(p1 + 2, p2 - 1, board, turn, 'N'));
+}
+
+bool king::pieceCheckHelp(int t1, int t2, piece * board[][8], int turn, char pType){
+    if ((t1 < 0) || (t1 > 7) || (t2 < 0) || (t2 > 7)){ return false; } 
+    return ((board[t1][t2]->name == pType) and (board[t1][t2]->player != turn));
+}
+
 //All moves the king can make
 vector <string> king::canMove(int i, int j, bool turn, piece * board[][8]){
     bool castle[4] = {false, false, false, false};

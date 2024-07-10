@@ -62,35 +62,6 @@ void knight::moveHelper(int i, int j, bool turn, int off1, int off2,
     return;
 }
 
-bool knight::canCheck(int f1, int f2, piece * board[][8]){
-    //use to make sure it is not the players own king
-    int opp = board[f1][f2]->player;
-    if( canCheckHelper(f1 + 1, f2 + 2, board, opp) or
-        canCheckHelper(f1 - 1, f2 + 2, board, opp) or
-        canCheckHelper(f1 + 1, f2 - 2, board, opp) or
-        canCheckHelper(f1 - 1, f2 - 2, board, opp) or
-        canCheckHelper(f1 + 2, f2 + 1, board, opp) or
-        canCheckHelper(f1 + 2, f2 + 1, board, opp) or
-        canCheckHelper(f1 - 2, f2 + 1, board, opp) or
-        canCheckHelper(f1 + 2, f2 - 1, board, opp) or
-        canCheckHelper(f1 - 2, f2 - 1, board, opp)){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool knight::canCheckHelper(int i, int j, piece * board[][8], int opp){
-    if ((i >= 0) and (i <= 7)){
-        if ((j >= 0) and (j <= 7)){
-            if ((board[i][j]->player != opp) and board[i][j]->name == 'K'){
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 void knight::undoSpace(){
     name = 'N';
     player = savedPlayer;

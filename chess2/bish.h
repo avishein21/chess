@@ -13,9 +13,6 @@ class bish : public piece
                           string p, bool castle[]);
         vector <string> canMove(int i, int j, bool turn, piece * board[][8]);
         void undoSpace();
-        //Also in queen
-        bool canCheck(int f1, int f2, piece * board[][8]);
-        static bool canCheckQ(int f1, int f2, piece * board[][8]);
         static bool rightDiag(int f1, int f2, int t2, piece * board[][8]);
         static bool leftDiag(int f1, int f2, int t2, piece * board[][8]);
 };

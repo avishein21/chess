@@ -35,9 +35,6 @@ bool queen::move(int f1, int f2, int t1, int t2, piece * board[][8],
     return false;
 }
 
-bool queen::canCheck(int f1, int f2, piece * board[][8]){
-    return (rook::canCheckQ(f1, f2, board) or bish::canCheckQ(f1, f2, board));
-}
 
 vector <string> queen::canMove(int i, int j, bool turn, piece * board[][8]){
     vector <string> allMoves;

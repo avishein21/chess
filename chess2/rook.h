@@ -14,8 +14,6 @@ class rook : public piece
         vector <string> canMove(int i, int j, bool turn, piece * board[][8]);
 
         //Also used in queen
-        bool canCheck(int f1, int f2, piece * board[][8]);
-        static bool canCheckQ(int f1, int f2, piece * board[][8]);
         static bool horiz(int from1, int from2, int to1, piece * board[][8]);
         static bool vert(int from1, int from2, int to2, piece * board[][8]);
         void undoSpace();

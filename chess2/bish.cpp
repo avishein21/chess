@@ -77,59 +77,6 @@ bool bish::leftDiag(int f1, int f2, int t2, piece * board[][8]){
     return true;
 }
 
-bool bish::canCheck(int f1, int f2, piece * board[][8]){
-    return bish::canCheckQ(f1, f2, board);
-}
-
-bool bish::canCheckQ(int f1, int f2, piece * board[][8]){
-    int opp = board[f1][f2]->player;
-    int i = 1;
-    while((f1 + i) < 8 and (f2 + i) < 8){
-        piece * test = board[f1 + i][f2 + i];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        i++;
-    }
-    i = 1;
-    while((f1 - i) >= 0 and (f2 + i) < 8){
-        piece * test = board[f1 - i][f2 + i];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        i++;
-    }
-    i = 1;
-    while((f1 + i) < 8 and (f2 - i) >= 0){
-        piece * test = board[f1 + i][f2 - i];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        i++;
-    }
-    i = 1;
-    while((f1 - i) >=0 and (f2 - i) >= 0){
-        piece * test = board[f1 - i][f2 - i];
-        if((test->player != opp) and (test->name == 'K')){
-            return true;
-        } else if ((test->player == opp) or ((test->player != opp) and 
-                    (test->name != '.'))){
-            break;
-        }
-        i++;
-    }
-    return false;
-}
-
 void bish::undoSpace(){
     name = 'B';
     player = savedPlayer;
