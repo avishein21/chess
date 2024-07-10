@@ -6,21 +6,23 @@
 
 //theme = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"}
 
-void board::play(string theme[], string opponent, string gameMode, bool Dev, 
-                int botColor){ 
-    setUpGame(theme, gameMode, Dev, botColor);
-    gameLoop(opponent, theme, gameMode);
-    reviewGame(theme);
+void board::play(string giventheme[], string opponent, string gameMode, bool Dev, 
+                int botColor){
+    for (int i = 0; i < 4; i++){ theme[i] = giventheme[i]; }
+    mode = gameMode;
+    setUpGame(Dev, botColor);
+    gameLoop(opponent);
+    reviewGame();
     resetGame();
 }
 
 //Sets multiple variables for game
-void board::setUpGame(string theme[], string gameMode, bool Dev, int botColor){
+void board::setUpGame(bool Dev, int botColor){
     if(Dev){
         comments = false;
     }
     //Get initial position
-    if(gameMode == "Custom Position"){
+    if(mode == "Custom Position"){
         //Delete default board and reset with custom
         startBoard.retBoard(gameBoard);
         setBoard::cleanBoard(gameBoard);
@@ -54,54 +56,68 @@ void board::setUpGame(string theme[], string gameMode, bool Dev, int botColor){
     }
     screen_clear();
     turn = true;
-    printState(theMove, theme, gameMode);
+    printState(theMove);
 }
 
 //Main Game Loop
-void board::gameLoop(string opponent, string theme[], string gameMode){
+void board::gameLoop(string opponent){
     (void) opponent;
     while (getline(cin, theMove)){
         screen_clear();
-        if (theMove == "Quit"){
-            break;
-        } else if (theMove == "Resign"){
-            if (turn){
-                cout << "Game Over White Resigned\n\n";
-            } else {
-                cout << "Game Over Black Resigned\n\n";
-            }
-            setBoard::printBoard(gameBoard, theme, "Classic", true);
-            endGame(theme);
-            theMove = "Quit";
-            break;
-        }
+        // Check if player wants to stop game
+        if (checkStop()) { break; }
         checkPiece move(gameBoard, pessSquare);
-        if (move.legal(theMove, turn, castle, compTurn)){
-            pieceName = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->name;
-            move.makeMove(theMove, gameBoard, castle, comments, theme, gameMode);
-            gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
-            turn = !turn;
-            string moveName = setBoard::pieceName(pieceName) + " from ";
-            moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
-            checkPiece checkWin(gameBoard, "");
-            allMoves++;
-            fen currFen(gameBoard, turn, moves, allMoves, pessSquare, castle);
-            key = currFen.retHalfFen();
-            boards.push_back(currFen);
-            if (gameOver(checkWin, theme)){
-                break;
-            }
-            printState(moveName, theme, gameMode);
-        } else {
-            printState("Error - " + move.retError(), theme, gameMode);
-        }
+        // Make move if possible
+        if (playerTurn(move)) { break; }
     }
 }
 
+// Checks if player wants to stop game
+bool board::checkStop(){
+    if (theMove == "Quit"){
+        return true;
+    } else if (theMove == "Resign"){
+        if (turn){
+            cout << "Game Over White Resigned\n\n";
+        } else {
+            cout << "Game Over Black Resigned\n\n";
+        }
+        setBoard::printBoard(gameBoard, theme, "Classic", true);
+        endGame();
+        theMove = "Quit";
+        return true;
+    }
+    return false;
+}
+
+// Makes move, and returns true if game is over, false otherwise
+bool board::playerTurn(checkPiece move){
+    if (move.legal(theMove, turn, castle, compTurn)){
+        pieceName = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->name;
+        move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
+        gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
+        turn = !turn;
+        string moveName = setBoard::pieceName(pieceName) + " from ";
+        moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
+        checkPiece checkWin(gameBoard, "");
+        allMoves++;
+        fen currFen(gameBoard, turn, moves, allMoves, pessSquare, castle);
+        key = currFen.retHalfFen();
+        boards.push_back(currFen);
+        if (gameOver(checkWin)){
+            return true;
+        }
+        printState(moveName);
+    } else {
+        printState("Error - " + move.retError());
+    }
+    return false;
+}
+
 //Prints full board with message
-void board::printState(string prev, string theme[], string gameMode){
+void board::printState(string prev){
     cout << "Type \"Quit\" to quit, or \"Resign\" to resign\n\nPrevious Move: " << prev << endl << endl;
-    setBoard::printBoard(gameBoard, theme, gameMode, false);
+    setBoard::printBoard(gameBoard, theme, mode, false);
     if (comments){
         if(turn){
             cout << "\nWhite to move\n";
@@ -113,7 +129,7 @@ void board::printState(string prev, string theme[], string gameMode){
 } 
 
 //Checks all forms of game over
-bool board::gameOver(checkPiece checkWin, string theme[]){
+bool board::gameOver(checkPiece checkWin){
     if (!checkWin.canMove(turn)){
         if(checkWin.canCheck(turn)){
             gameMessage = "Game over -- Checkmate\n";
@@ -181,9 +197,9 @@ int board::addMat(char c){
 }
 
 //Look back through boards
-void board::reviewGame(string theme[]){
+void board::reviewGame(){
     if(comments && theMove != "Quit"){
-        endGame(theme);
+        endGame();
     }
     setBoard::cleanBoard(gameBoard);
 }
@@ -201,7 +217,7 @@ void board::resetGame(){
 }
 
 //Goes through all boards in the game
-void board::endGame(string theme[]){
+void board::endGame(){
     string command, optLine = "Enter an option: ";
     endGameOpts(optLine);
     int length = boards.size() - 1;

@@ -17,22 +17,26 @@ class board
         void play(string theme[], string opponent, string gameMode, bool Dev, 
                     int botColor);
     private:
-        bool gameOver(checkPiece move, string theme[]);
-        void printState(string prev, string theme[], string gameMode);
+        bool gameOver(checkPiece move);
+        void printState(string prev);
         string moveName();
-        void setUpGame(string theme[], string gameMode, bool Dev, int botColor);
-        void gameLoop(string opponent, string theme[], string gameMode);
-        void reviewGame(string theme[]);
-        void endGame(string theme[]);
+        void setUpGame(bool Dev, int botColor);
+        void gameLoop(string opponent);
+        void reviewGame();
+        void endGame();
         void endGameOpts(string optLine);
         bool threeRep();
         void resetGame();
         bool matDraw();
+        bool playerTurn(checkPiece move);
         int addMat(char c);
+        bool checkStop();
+        string theme[4]; // Holds colors of pieces
+        string mode; // keeps gamemode name
         //General variables for board
         char pieceName; //Letter representing piece being moved
         string theMove = "None"; //String holding current move
-        piece * gameBoard[8][8]; //Board where game takes place
+        piece *gameBoard[8][8]; //Board where game takes place
         bool turn; //True = White, False = Black
         int initCount; //Amount of pieces on board, to see if capture happened
         int moves; // How many moves until 50 move rule in effect
