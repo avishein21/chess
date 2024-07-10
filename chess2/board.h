@@ -27,7 +27,8 @@ class board
         void endGameOpts(string optLine);
         bool threeRep();
         void resetGame();
-
+        bool matDraw();
+        int addMat(char c);
         //General variables for board
         char pieceName; //Letter representing piece being moved
         string theMove = "None"; //String holding current move

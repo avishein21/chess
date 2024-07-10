@@ -61,17 +61,17 @@ bool king::canCheck(int p1, int p2, piece * board[][8]){
 }
 
 bool king::rookCheck(int p1, int p2, piece * board[][8], int turn){
-    return  (rbqHelper(p1, p2, board, turn, 1, 0, 'R') || 
+    return (rbqHelper(p1, p2, board, turn, 1, 0, 'R')  || 
             rbqHelper(p1, p2, board, turn, -1, 0, 'R') ||
             rbqHelper(p1, p2, board, turn, 0, 1, 'R')  ||
             rbqHelper(p1, p2, board, turn, 0, -1, 'R'));
 }
 
 bool king::bishCheck(int p1, int p2, piece * board[][8], int turn){
-    return  (rbqHelper(p1, p2, board, turn, 1, 1, 'B') || 
-            rbqHelper(p1, p2, board, turn, -1, -1, 'B') ||
-            rbqHelper(p1, p2, board, turn, -1, 1, 'B')  ||
-            rbqHelper(p1, p2, board, turn, 1, -1, 'B'));
+    return  (rbqHelper(p1, p2, board, turn, 1, 1, 'B')   || 
+             rbqHelper(p1, p2, board, turn, -1, -1, 'B') ||
+             rbqHelper(p1, p2, board, turn, -1, 1, 'B')  ||
+             rbqHelper(p1, p2, board, turn, 1, -1, 'B'));
 }
 
 bool king::rbqHelper(int p1, int p2, piece * board[][8], int turn, int d1, int d2, char c){

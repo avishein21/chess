@@ -125,8 +125,8 @@ bool board::gameOver(checkPiece checkWin, string theme[]){
         } else {
             gameMessage = "Game over -- Stalemate\n\n";
         }
-    // } else if (matDraw()){
-    //     gameMessage = "Game over -- Insufficient Material\n\n";
+    } else if (matDraw()){
+        gameMessage = "Game over -- Insufficient Material\n\n";
     // } else if (fiftyMoves()){
     //     gameMessage = "Game over -- 50 move rule\n\n";
     } else if (threeRep()){
@@ -149,6 +149,35 @@ bool board::threeRep(){
         return true;
     }
     return false;
+}
+
+bool board::matDraw(){
+    int wMat = 0;
+    int bMat = 0;
+    for (int i = 0; i < 64; i++){
+        piece *p = gameBoard[i / 8][i % 8];
+        if(p->player == 0){
+            bMat += addMat(p->name);
+        } else if (p->player == 1){
+            wMat += addMat(p->name);
+        }
+        if ((bMat > 2) || (wMat > 2)){
+            return true;
+        }
+    }
+    return false;
+}
+
+int board::addMat(char c){
+    if (c == 'N'){
+        return 1;
+    } else if (c == 'B'){
+        return 2;
+    } else if (!(c == 'K')){
+        return 5;
+    } else {
+        return 0;
+    }
 }
 
 //Look back through boards
@@ -223,5 +252,3 @@ void board::endGameOpts(string optLine){
     cout << optLine;
     return;
 }
-
-
