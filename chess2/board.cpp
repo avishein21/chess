@@ -162,10 +162,10 @@ bool board::matDraw(){
             wMat += addMat(p->name);
         }
         if ((bMat > 2) || (wMat > 2)){
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 int board::addMat(char c){
