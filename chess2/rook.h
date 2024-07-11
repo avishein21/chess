@@ -10,7 +10,7 @@ class rook : public piece
     public:
         rook(bool color);
         bool move(int from1, int from2, int to1, int to2, piece * board[][8], 
-                          string p, bool castle[]);
+                          int p, bool castle[]);
         vector <string> canMove(int i, int j, bool turn, piece * board[][8]);
 
         //Also used in queen

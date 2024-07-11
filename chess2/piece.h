@@ -15,8 +15,9 @@ class piece
         char name; 
         piece();
         void makeSpace();
+        virtual int pFile(int f2, int t2, int t1);
         virtual bool move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          string p, bool castle[]);
+                          int p, bool castle[]);
         virtual bool canCheck(int f1, int f2, piece * board[][8]);
         //make move func? (simple for all but king and pawn)
         virtual vector <string> canMove(int i, int j, bool t, piece * b[][8]);
@@ -29,7 +30,7 @@ class Space : public piece {
   public:
     Space();
     bool move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          string p, bool castle[]);
+                          int p, bool castle[]);
     bool canCheck(int f1, int f2, piece * board[][8]);
     vector <string> canMove(int i, int j, bool turn, 
                                         piece * board[][8]);

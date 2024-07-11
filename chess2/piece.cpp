@@ -12,7 +12,7 @@ piece::piece() {
 }
 
 bool piece::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                    string p, bool castle[]){
+                    int p, bool castle[]){
     (void) f1;
     (void) f2;
     (void) t1;
@@ -39,6 +39,13 @@ vector <string> piece::canMove(int i, int j, bool turn, piece * board[][8]){
     return noMove;
 }
 
+int piece::pFile(int f2, int t2, int t1){ 
+    (void) f2;
+    (void) t2;
+    (void) t1;
+    return -1;
+}
+
 void piece::makeSpace(){
     player = 2;
     name = '.'; 
@@ -58,7 +65,7 @@ Space::Space(){
 }
 
 bool Space::move(int f1, int f2, int t1, int t2, piece * board[][8],
-                  string p, bool castle[]){
+                  int p, bool castle[]){
     (void) f1;
     (void) f2;
     (void) t1;

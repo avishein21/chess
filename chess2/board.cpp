@@ -37,7 +37,7 @@ void board::setUpGame(int botColor){
     //Variables for setting up position
     moves = startBoard.retMove50();
     allMoves = startBoard.retMoveNum();
-    pessSquare = startBoard.retPessant();
+    pessSquare = int (startBoard.retPessant()[0] - 'A');
     turn = startBoard.retTurn();
     castle = startBoard.retCastle();
 
@@ -98,7 +98,7 @@ bool board::playerTurn(checkPiece move){
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
         if (captured || (pieceName == 'P')){ moves = 0; } else { moves++; }
         // make move
-        move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
+        pessSquare = move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
         gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
         // Switch turn
         turn = !turn;
@@ -107,11 +107,11 @@ bool board::playerTurn(checkPiece move){
         moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
         allMoves++;
         // Create Fen for current position
-        fen currFen(gameBoard, turn, moves, allMoves, pessSquare, castle);
+        fen currFen(gameBoard, turn, moves, allMoves, "", castle);
         // Add board to list of moves
         key = currFen.retHalfFen();
         // Check if game is over
-        checkPiece checkWin(gameBoard, "");
+        checkPiece checkWin(gameBoard, pessSquare);
         boards.push_back(currFen);
         if (gameOver(checkWin)){ return true; }
         printState(moveName);

@@ -18,12 +18,14 @@ pawn::pawn(bool color){
 }
 
 bool pawn::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          string p, bool castle[]){
+                          int p, bool castle[]){
 	(void) castle;
     if (board[f2][f1]->player){
-		return whiteMove(f1,f2, t1, t2, board, p);
+		// White move
+		return pHelper(f1,f2, t1, t2, board, p, -1, 6);
     } else {
-		return blackMove(f1,f2, t1, t2, board, p);
+		// Black move
+		return pHelper(f1,f2, t1, t2, board, p, 1, 1);
 	}
 }
 
@@ -34,7 +36,7 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     bool castle[4] = {false, false, false, false};
     char spot = j + 65;
     string initSpot = string(1,spot) + char((8 - i) + 48) + " ";
-	checkPiece pawnMove(board, "");
+	checkPiece pawnMove(board, -1);
     for (int k = -1; k < 2; k++){
         if(turn){
             moveTry = initSpot + char(spot + k) + char((8 - i) + 49);
@@ -60,89 +62,34 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     return possibleMoves;  
 }
 
-bool pawn::whiteMove(int f1, int f2, int t1, int t2, piece * board[][8], 
-					string pessSquare){
+bool pawn::pHelper(int f1, int f2, int t1, int t2, piece *board[][8], 
+					int pessSquare, int dir, int startSq){
 	// one space
-	if (f2 - t2 == 1){
+	if (t2 - f2 == dir){
+		// Diagonal
 		if (abs(f1-t1) == 1){
-			if(board[t2][t1]-> player == 0){
+			// Capture opponent
+			if(board[t2][t1]-> player == (board[f2][f1]->player + dir)){
 				return true;
-			} else if (checkPessant(t1, t2, pessSquare)){
-				return true;
-			} else {
-				return false;
-			}
-		} else if ((f1-t1) == 0){
-			// check for piece on board in this square
-			if(board[t2][t1]-> player == 2){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	// two space
-	} else if (f2 == 6){
-		if ((t2 == 4) and (f1 - t1 == 0)){
-			if((board[4][t1]-> player == 2) and (board[5][t1]-> player == 2)){
-				// Set pessant
-				cout << char('A' + t1) << "3 is pessant square\n";
-				return true;
-			}
-		}
-		return false;
-	} else {
-		return false;
+			} 
+			// Going to pessant file at correct square
+			if((t1 == pessSquare) && (t2 == (startSq + (4 * dir)))){
+                board[t2 - dir][t1]->makeSpace();
+                return true;
+            }
+            return false;
+		} 
+		// Straight
+		return (((f1-t1) == 0) && (board[t2][t1]-> player == 2));
 	}
-	return true;
+	// two space (on start, moving 2 up, both spaces empty)
+	return ((f2 == startSq) && (t2 == (startSq + 2 * dir)) && (f1 - t1 == 0) && 
+			(board[startSq + 2 * dir][t1]-> player == 2) && 
+			(board[startSq + dir][t1]-> player == 2));
 }
 
-bool pawn::blackMove(int f1, int f2, int t1, int t2, piece * board[][8],
-					string pessSquare){
-	// one space
-	if (t2 - f2 == 1){
-		if (abs(t1-f1) == 1){
-			if(board[t2][t1]->player == 1){
-				return true;
-			} else if (checkPessant(t1, t2, pessSquare)){
-				return true;
-			} else {
-				return false;
-			}
-		} else if ((f1-t1) == 0){
-			// check for piece on board in this square
-			if(board[t2][t1]->player == 2){
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	// two spaces
-	} else if (f2 == 1){
-		if ((t2 == 3) and (f1 - t1 == 0)){
-			if((board[3][t1]->player == 2) and (board[2][t1]->player == 2)){
-				cout << char('A' + t1) << "6 is pessant square\n";
-				return true;
-			}
-		}
-		return false;
-	} else {
-		return false;
-	}
-}
-
-bool pawn::checkPessant(int t1, int t2, string pessSquare){
-	if(pessSquare == ""){
-		return false;
-	}
-	string checkSquare = string(1,t1 + 'A') + string(1, (7 - t2) + '1');
-	if (checkSquare == pessSquare){
-		return true;
-	}
-	return false;
+int pawn::pFile(int f2, int t2, int t1){
+	if (abs(f2-t2) == 2) { return t1; } else { return -1; }
 }
 
 void pawn::undoSpace(){

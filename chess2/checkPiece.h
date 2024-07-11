@@ -12,7 +12,7 @@ class checkPiece
 {
     public:
         //Constructor
-        checkPiece(piece * givenB[][8], string pess);
+        checkPiece(piece * givenB[][8], int pess);
 
         //Says if a player has ANY move
         bool canMove(bool turn); 
@@ -20,8 +20,8 @@ class checkPiece
         //Checks if a move is legal
         bool legal(string theMove, bool turn, bool castle[], bool botMove);
         
-        //Make move on board
-        void makeMove(string theMove, piece * realBoard[][8], bool castle[], 
+        //Make move on board and return pessant file if it exists
+        int makeMove(string theMove, piece * realBoard[][8], bool castle[], 
                         bool comments, string theme[], string gameMode);
 
         //Says if any piece can check the king
@@ -42,7 +42,7 @@ class checkPiece
         void updatePes(string testPes, piece realBoard [][8]);
 
         string errMess = ""; //Error message
-        string pessSquare = "";
+        int pessSquare = -1;
         piece *board[8][8]; //Board where game takes place
         int from1, from2, to1, to2; //Locations
         //Normal theme

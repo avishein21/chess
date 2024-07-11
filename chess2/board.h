@@ -45,7 +45,7 @@ class board
         bool comments; //Turned off for testing
         bool playBot = false; //Is a bot being played?
         bool compTurn = false; //Is it the bot's turn?
-        string pessSquare; //Square that can be en passanted
+        int pessSquare = -1; //Column that can be en passanted
         string key; //Board state fen
         fen startBoard;
         fen reset;

@@ -14,11 +14,11 @@ king::king(bool color){
     savedPlayer = player;
 }
 bool king::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                string p, bool caslte[]){
+                int p, bool caslte[]){
     (void) p;
     (void) caslte;
     string theMove;
-    checkPiece kingCheck(board, "");
+    checkPiece kingCheck(board, -1);
     for (int i = -1; i <= 1; i++){
         for(int j = -1; j <= 1; j++){
             int test2 = t2 + i;
@@ -140,7 +140,7 @@ vector <string> king::canMove(int i, int j, bool turn, piece * board[][8]){
         char trySpot2 = 9 - (i + k/3) + 48;
         char trySpot3 = 8 - (i) + 48;
         moveTry = string(1,spot) + trySpot3 + " " + trySpot + trySpot2;
-        checkPiece position(board, "");
+        checkPiece position(board, -1);
         if (position.legal(moveTry, turn, castle, false)){
             possibleMoves.push_back(moveTry);
         }

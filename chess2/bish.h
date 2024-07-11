@@ -10,7 +10,7 @@ class bish : public piece
     public:
         bish(bool color);
         bool move(int from1, int from2, int to1, int to2, piece * board[][8], 
-                          string p, bool castle[]);
+                          int p, bool castle[]);
         vector <string> canMove(int i, int j, bool turn, piece * board[][8]);
         void undoSpace();
         static bool rightDiag(int f1, int f2, int t2, piece * board[][8]);

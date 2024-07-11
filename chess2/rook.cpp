@@ -17,7 +17,7 @@ rook::rook(bool color){
 }
 
 bool rook::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          string p, bool castle[]){
+                          int p, bool castle[]){
     (void) p;
     (void) castle;
     if (f1 - t1 == 0){

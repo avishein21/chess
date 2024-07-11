@@ -14,17 +14,13 @@
 
 using namespace std;
 
-checkPiece::checkPiece(piece * givenB[][8], string pess){
+checkPiece::checkPiece(piece * givenB[][8], int pess){
     memcpy(board, givenB, sizeof(board));
     pessSquare = pess;
 }
 
 string checkPiece::retError(){
     return errMess;
-}
-
-string checkPiece::retPes(){
-    return pessSquare;
 }
 
 void checkPiece::translateMove(string theMove){
@@ -90,7 +86,7 @@ bool checkPiece::legal(string theMove, bool turn, bool castle[], bool botMove){
 // Checks if legal move for piece type
 bool checkPiece::pieceMove(piece * test, bool castle[]){
     //fill in passant
-    if (test->move(from1, from2, to1, to2, board, "", castle)){
+    if (test->move(from1, from2, to1, to2, board, pessSquare, castle)){
         return true;
     } else {
         errMess = "Not a legal " + setBoard::pieceName(test->name) + " move";
@@ -125,7 +121,7 @@ bool checkPiece::pieceMove(piece * test, bool castle[]){
 // }
 
 //Make move on real board
-void checkPiece::makeMove(string theMove, piece *realBoard[][8], bool castle[], 
+int checkPiece::makeMove(string theMove, piece *realBoard[][8], bool castle[], 
                             bool comments, string theme[], string gameMode){
     (void) castle;
     (void) theme;
@@ -146,6 +142,7 @@ void checkPiece::makeMove(string theMove, piece *realBoard[][8], bool castle[],
     //     pessSquare = "";
     // }
     realBoard[from2][from1] = temp;
+    return realBoard[to2][to1]->pFile(from2, to2, to1);
 }
 
 // bool checkPiece::tryCastle(piece checkPiece, piece realBoard[][8],
