@@ -17,10 +17,10 @@ class board
         void play(string theme[], string opponent, string gameMode, bool Dev, 
                     int botColor);
     private:
-        bool gameOver(checkPiece move);
+        bool gameOver(checkPiece move, bool captured);
         void printState(string prev);
         string moveName();
-        void setUpGame(bool Dev, int botColor);
+        void setUpGame(int botColor);
         void gameLoop(string opponent);
         void reviewGame();
         void endGame();
@@ -31,6 +31,7 @@ class board
         bool playerTurn(checkPiece move);
         int addMat(char c);
         bool checkStop();
+        bool fiftyMoves(bool captured);
         string theme[4]; // Holds colors of pieces
         string mode; // keeps gamemode name
         //General variables for board
@@ -38,19 +39,18 @@ class board
         string theMove = "None"; //String holding current move
         piece *gameBoard[8][8]; //Board where game takes place
         bool turn; //True = White, False = Black
-        int initCount; //Amount of pieces on board, to see if capture happened
         int moves; // How many moves until 50 move rule in effect
         int allMoves;//Total moves made
         string gameMessage= ""; //Message for game over
         bool *castle; //Castle array
-        bool comments = true; //Turned off for testing
+        bool comments; //Turned off for testing
         bool playBot = false; //Is a bot being played?
         bool compTurn = false; //Is it the bot's turn?
         string pessSquare; //Square that can be en passanted
         string key; //Board state fen
-        unordered_map<string, bool> hashMoves; //All moves to track 3 fold rep
         fen startBoard;
         fen reset;
+        unordered_map<string, bool> hashMoves; //All moves to track 3 fold rep
         vector <fen> boards; //FENs of all boards (and more info)
 };
 

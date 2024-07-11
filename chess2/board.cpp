@@ -8,19 +8,19 @@
 
 void board::play(string giventheme[], string opponent, string gameMode, bool Dev, 
                 int botColor){
+    // Set variables for this board
     for (int i = 0; i < 4; i++){ theme[i] = giventheme[i]; }
     mode = gameMode;
-    setUpGame(Dev, botColor);
+    comments = !Dev;
+    // Play game
+    setUpGame(botColor);
     gameLoop(opponent);
     reviewGame();
     resetGame();
 }
 
 //Sets multiple variables for game
-void board::setUpGame(bool Dev, int botColor){
-    if(Dev){
-        comments = false;
-    }
+void board::setUpGame(int botColor){
     //Get initial position
     if(mode == "Custom Position"){
         //Delete default board and reset with custom
@@ -94,6 +94,7 @@ bool board::checkStop(){
 bool board::playerTurn(checkPiece move){
     if (move.legal(theMove, turn, castle, compTurn)){
         pieceName = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->name;
+        bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
         move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
         gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
         turn = !turn;
@@ -104,7 +105,7 @@ bool board::playerTurn(checkPiece move){
         fen currFen(gameBoard, turn, moves, allMoves, pessSquare, castle);
         key = currFen.retHalfFen();
         boards.push_back(currFen);
-        if (gameOver(checkWin)){
+        if (gameOver(checkWin, captured)){
             return true;
         }
         printState(moveName);
@@ -129,7 +130,7 @@ void board::printState(string prev){
 } 
 
 //Checks all forms of game over
-bool board::gameOver(checkPiece checkWin){
+bool board::gameOver(checkPiece checkWin, bool captured){
     if (!checkWin.canMove(turn)){
         if(checkWin.canCheck(turn)){
             gameMessage = "Game over -- Checkmate\n";
@@ -143,8 +144,8 @@ bool board::gameOver(checkPiece checkWin){
         }
     } else if (matDraw()){
         gameMessage = "Game over -- Insufficient Material\n\n";
-    // } else if (fiftyMoves()){
-    //     gameMessage = "Game over -- 50 move rule\n\n";
+    } else if (fiftyMoves(captured)){
+        gameMessage = "Game over -- 50 move rule\n\n";
     } else if (threeRep()){
         gameMessage = "Game over -- 3 Fold Repitition\n\n";
     } else {
@@ -167,6 +168,13 @@ bool board::threeRep(){
     return false;
 }
 
+//Checks 50 move rule
+bool board::fiftyMoves(bool captured){
+    if (captured || (pieceName == 'P')){ moves = 0; } else { moves ++; }
+    return (moves == 100);
+}
+
+// Checks if there's enough material remaining on board for mate
 bool board::matDraw(){
     int wMat = 0;
     int bMat = 0;
@@ -184,6 +192,7 @@ bool board::matDraw(){
     return true;
 }
 
+// Helper from matDraw
 int board::addMat(char c){
     if (c == 'N'){
         return 1;
