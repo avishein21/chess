@@ -5,6 +5,13 @@
 #include "termfuncs.h"
 #include <regex> 
 
+#include "knight.h"
+#include "rook.h"
+#include "bish.h"
+#include "queen.h"
+#include "king.h"
+
+
 using namespace std;
 
 checkPiece::checkPiece(piece * givenB[][8], string pess){
@@ -87,7 +94,7 @@ bool checkPiece::pieceMove(piece * test, bool castle[]){
         return true;
     } else {
         errMess = "Not a legal " + setBoard::pieceName(test->name) + " move";
-        return false; 
+        return false;
     }
 }
 
@@ -118,26 +125,26 @@ bool checkPiece::pieceMove(piece * test, bool castle[]){
 // }
 
 //Make move on real board
-void checkPiece::makeMove(string theMove, piece * realBoard[][8], bool castle[], 
+void checkPiece::makeMove(string theMove, piece *realBoard[][8], bool castle[], 
                             bool comments, string theme[], string gameMode){
     (void) castle;
     (void) theme;
     (void) comments;
     (void) gameMode;
     translateMove(theMove);
-    piece * temp = realBoard[to2][to1];
+    // Turn the piece moving to into a space 
+    piece *temp = realBoard[to2][to1];
+    temp->makeSpace();
+    // If promoting a pawn, switch to new piece before moving
+    tryPromote(realBoard, comments, theme, gameMode);
     realBoard[to2][to1] = realBoard[from2][from1];
     // if(!tryCastle(checkPiece, realBoard, castle)){
-    //     if(!tryPromote(checkPiece, realBoard, comments, theme, gameMode)){
-    //         realBoard[to2][to1] = realBoard[from2][from1];
-    //     }
     // }
     // if (checkPiece.name == 'P'){
     //     updatePes(theMove.substr(3,2), realBoard);
     // } else {
     //     pessSquare = "";
     // }
-    temp->makeSpace();
     realBoard[from2][from1] = temp;
 }
 
@@ -179,50 +186,37 @@ void checkPiece::makeMove(string theMove, piece * realBoard[][8], bool castle[],
 //     return true;
 // }
 
-// bool checkPiece::tryPromote(piece promote, piece realBoard[][8],
-//                             bool comments, string theme[], string gameMode){
-//     if (promote.name == 'P') {
-//         if (((promote.player == 1) and (to2 == 0)) ||
-//             ((promote.player == 0) and (to2 == 7))){
-//             string pieceName;
-//             setBoard print;
-//             if (comments){
-//                 cout << "Type \"Quit\" to quit\n\n";
-//                 cout << "Previous Move: Pawn to promotion square\n\n";
-//                 print.printBoard(board, theme, gameMode, false);
-//                 cout << "What piece would you like to promote to (Q, R, N, B): ";
-//                 while(getline(cin, pieceName)){
-//                     if (pieceName == "Q"){
-//                         realBoard[to2][to1].name = 'Q';
-//                         break;
-//                     } else if (pieceName == "R"){
-//                         realBoard[to2][to1].name = 'R';
-//                         break;
-//                     } else if (pieceName == "B"){
-//                         realBoard[to2][to1].name = 'B';
-//                         break;
-//                     } else if (pieceName == "N"){
-//                         realBoard[to2][to1].name = 'N';
-//                         break;
-//                     } else {                
-//                         screen_clear();
-//                         cout << "Type \"Quit\" to quit\n\n";
-//                         cout << "Previous Move: Pawn to promotion square\n\n";
-//                         print.printBoard(realBoard, theme, gameMode, false);
-//                         cout << "Invalid piece, what piece would you like to ";
-//                         cout << "promote to (Q, R, N, B): ";
-//                     }
-//                 }
-//                 screen_clear();
-//             } else {
-//                 realBoard[to2][to1].name = 'Q';
-//             }
-//             realBoard[to2][to1].player = promote.player;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+void checkPiece::tryPromote(piece *realBoard[][8], bool comments, string theme[], string gameMode){
+    piece *promote = realBoard[from2][from1];
+    // If it's a promoting pawn
+    if ((promote->name == 'P') && ((to2 == 0) || (to2 == 7))){
+        // Find what to promote to
+        if (comments){
+            piece *promoted = getPromoted(realBoard, theme, gameMode, promote->player);
+            delete realBoard[from2][from1];
+            realBoard[from2][from1] = promoted;
+        } else {
+            // delete realBoard[from2][from1];
+            realBoard[from2][from1] = new queen(promote->player);
+        }
+    }
+}
+
+piece *checkPiece::getPromoted(piece *realBoard[][8], string theme[], string gameMode, bool player){
+    setBoard print;
+    string pieceName;
+    cout << "Type \"Quit\" to quit\n\n";
+    cout << "Previous Move: Pawn to promotion square\n\n";
+    print.printBoard(realBoard, theme, gameMode, false);
+    cout << "What piece would you like to promote to (Q, R, N, B): ";
+    getline(cin, pieceName);
+    screen_clear();
+    if (pieceName == "Q"){ return new queen(player); } 
+    if (pieceName == "R"){ return new rook(player); } 
+    if (pieceName == "B"){ return new bish(player); } 
+    if (pieceName == "N"){ return new knight(player); } 
+    return getPromoted(realBoard, theme, gameMode, player);
+}
 
 bool checkPiece::canMove(bool turn){
     piece * temp = board[0][0];

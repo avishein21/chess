@@ -94,20 +94,26 @@ bool board::checkStop(){
 bool board::playerTurn(checkPiece move){
     if (move.legal(theMove, turn, castle, compTurn)){
         pieceName = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->name;
+        // Update halfmove for 50 move rule
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
+        if (captured || (pieceName == 'P')){ moves = 0; } else { moves++; }
+        // make move
         move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
         gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
+        // Switch turn
         turn = !turn;
+        // Create move name for printing
         string moveName = setBoard::pieceName(pieceName) + " from ";
         moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
-        checkPiece checkWin(gameBoard, "");
         allMoves++;
+        // Create Fen for current position
         fen currFen(gameBoard, turn, moves, allMoves, pessSquare, castle);
+        // Add board to list of moves
         key = currFen.retHalfFen();
+        // Check if game is over
+        checkPiece checkWin(gameBoard, "");
         boards.push_back(currFen);
-        if (gameOver(checkWin, captured)){
-            return true;
-        }
+        if (gameOver(checkWin)){ return true; }
         printState(moveName);
     } else {
         printState("Error - " + move.retError());
@@ -130,7 +136,7 @@ void board::printState(string prev){
 } 
 
 //Checks all forms of game over
-bool board::gameOver(checkPiece checkWin, bool captured){
+bool board::gameOver(checkPiece checkWin){
     if (!checkWin.canMove(turn)){
         if(checkWin.canCheck(turn)){
             gameMessage = "Game over -- Checkmate\n";
@@ -144,7 +150,7 @@ bool board::gameOver(checkPiece checkWin, bool captured){
         }
     } else if (matDraw()){
         gameMessage = "Game over -- Insufficient Material\n\n";
-    } else if (fiftyMoves(captured)){
+    } else if (moves == 100){
         gameMessage = "Game over -- 50 move rule\n\n";
     } else if (threeRep()){
         gameMessage = "Game over -- 3 Fold Repitition\n\n";
@@ -166,12 +172,6 @@ bool board::threeRep(){
         return true;
     }
     return false;
-}
-
-//Checks 50 move rule
-bool board::fiftyMoves(bool captured){
-    if (captured || (pieceName == 'P')){ moves = 0; } else { moves ++; }
-    return (moves == 100);
 }
 
 // Checks if there's enough material remaining on board for mate

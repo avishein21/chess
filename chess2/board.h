@@ -17,7 +17,7 @@ class board
         void play(string theme[], string opponent, string gameMode, bool Dev, 
                     int botColor);
     private:
-        bool gameOver(checkPiece move, bool captured);
+        bool gameOver(checkPiece move);
         void printState(string prev);
         string moveName();
         void setUpGame(int botColor);
@@ -31,7 +31,6 @@ class board
         bool playerTurn(checkPiece move);
         int addMat(char c);
         bool checkStop();
-        bool fiftyMoves(bool captured);
         string theme[4]; // Holds colors of pieces
         string mode; // keeps gamemode name
         //General variables for board

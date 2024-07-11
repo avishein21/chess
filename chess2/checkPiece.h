@@ -43,7 +43,7 @@ class checkPiece
 
         string errMess = ""; //Error message
         string pessSquare = "";
-        piece * board[8][8]; //Board where game takes place
+        piece *board[8][8]; //Board where game takes place
         int from1, from2, to1, to2; //Locations
         //Normal theme
         string thm[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"};
@@ -59,8 +59,8 @@ class checkPiece
         bool castleQueen(piece realBoard[][8], int side);
         
         //Move to pawn?
-        bool tryPromote(piece promote, piece realBoard[][8],
-                        bool comments, string theme[], string gameMode);
+        void tryPromote(piece *realBoard[][8], bool comments, string theme[], string gameMode);
+        piece *getPromoted(piece *realBoard[][8], string theme[], string gameMode, bool player);
 };
 
 #endif
