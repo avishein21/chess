@@ -16,10 +16,8 @@ rook::rook(bool color){
     savedPlayer = player;
 }
 
-bool rook::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          int p, bool castle[]){
+bool rook::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) p;
-    (void) castle;
     if (f1 - t1 == 0){
         return vert(f1, f2, t2, board);
     } else if (f2 - t2 == 0) {

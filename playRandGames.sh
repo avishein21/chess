@@ -1,7 +1,7 @@
 #! /bin/sh
 # chmod +x playRandGames.sh
 
-cd chess
+cd chess2
 echo "" > del.txt
 make > del.txt
 rm -r del.txt

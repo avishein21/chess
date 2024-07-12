@@ -16,10 +16,8 @@ bish::bish(bool color){
     savedPlayer = player;
 }
 
-bool bish::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          int p, bool castle[]){
+bool bish::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) p;
-    (void) castle;
     if (abs(f1-t1) == abs(f2 - t2)){
         if (f1 < t1){
             return rightDiag(f1, f2, t2, board);

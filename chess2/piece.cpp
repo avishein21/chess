@@ -11,23 +11,26 @@ piece::piece() {
     name = 'E'; 
 }
 
-bool piece::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                    int p, bool castle[]){
+bool piece::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) f1;
     (void) f2;
     (void) t1;
     (void) t2;
     (void) board;
     (void) p;
-    (void) castle;
     return false;
 }
 
-bool piece::canCheck(int f1, int f2, piece * board[][8]){
+bool piece::canCheck(int f1, int f2, piece * board[][8], int turn){
     (void) f1;
     (void) f2;
     (void) board;
+    (void) turn;
     return false;
+}
+
+void piece::setCastle(bool side){
+    (void) side;
 }
 
 vector <string> piece::canMove(int i, int j, bool turn, piece * board[][8]){
@@ -64,22 +67,21 @@ Space::Space(){
     name = '.'; 
 }
 
-bool Space::move(int f1, int f2, int t1, int t2, piece * board[][8],
-                  int p, bool castle[]){
+bool Space::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) f1;
     (void) f2;
     (void) t1;
     (void) t2;
     (void) board;
     (void) p;
-    (void) castle;
     return false;
 }
 
-bool Space::canCheck(int f1, int f2, piece * board[][8]){
+bool Space::canCheck(int f1, int f2, piece * board[][8], int turn){
     (void) f1;
     (void) f2;
     (void) board;
+    (void) turn;
     return false;
 }
 

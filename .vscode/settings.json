@@ -70,6 +70,10 @@
         "memory_resource": "cpp",
         "filesystem": "cpp",
         "thread": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "functional": "cpp",
+        "__verbose_abort": "cpp",
+        "charconv": "cpp",
+        "regex": "cpp"
     }
 }

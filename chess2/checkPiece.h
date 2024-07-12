@@ -18,28 +18,25 @@ class checkPiece
         bool canMove(bool turn); 
 
         //Checks if a move is legal
-        bool legal(string theMove, bool turn, bool castle[], bool botMove);
+        bool legal(string theMove, bool turn, bool botMove);
         
         //Make move on board and return pessant file if it exists
-        int makeMove(string theMove, piece * realBoard[][8], bool castle[], 
-                        bool comments, string theme[], string gameMode);
+        int makeMove(string theMove, piece * realBoard[][8], bool comments, 
+                        string theme[], string gameMode);
 
         //Says if any piece can check the king
         bool canCheck(bool turn);
 
-        //Gets total amount of points on board. Move elsewhere? 
-        int boardPoints();
-
         //Returns error message
         string retError();
 
-        //Return pessant Square
-        string retPes();
     private: 
+        // Takes string and turns to locations
         void translateMove(string theMove);
-        bool pieceMove(piece * test, bool castle[]);
+        // Says if legal move for this piece type
+        bool pieceMove(piece * test);
+        // Gets corresponding points per piece
         int piecePoints(char pieceName);
-        void updatePes(string testPes, piece realBoard [][8]);
 
         string errMess = ""; //Error message
         int pessSquare = -1;
@@ -48,15 +45,10 @@ class checkPiece
         //Normal theme
         string thm[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"};
 
-        //castle array here?
-        //turn here?
-
-    //IF IMPLEMENTING "MOVE" IN PIECE
+        //TODO: add turn, theme, and gamemode variables
 
         //Move to king?
-        bool tryCastle(piece checkPiece, piece realBoard[][8], bool castle[]);
-        bool castleKing(piece realBoard[][8], int side);
-        bool castleQueen(piece realBoard[][8], int side);
+        void tryCastle(piece *realBoard[][8]);
         
         //Move to pawn?
         void tryPromote(piece *realBoard[][8], bool comments, string theme[], string gameMode);

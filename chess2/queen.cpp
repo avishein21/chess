@@ -16,10 +16,8 @@ queen::queen(bool color){
     savedPlayer = player;
 }
 
-bool queen::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          int p, bool castle[]){
+bool queen::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) p;
-    (void) castle;
     if (f1 - t1 == 0){
         return rook::vert(f1, f2, t2, board);
     } else if (f2 - t2 == 0) {
@@ -35,7 +33,6 @@ bool queen::move(int f1, int f2, int t1, int t2, piece * board[][8],
     return false;
 }
 
-
 vector <string> queen::canMove(int i, int j, bool turn, piece * board[][8]){
     vector <string> allMoves;
 	if(name == '.'){ return allMoves; }
@@ -50,4 +47,3 @@ void queen::undoSpace(){
     name = 'Q';
     player = savedPlayer;
 }
-

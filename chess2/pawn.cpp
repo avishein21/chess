@@ -17,9 +17,7 @@ pawn::pawn(bool color){
 	savedPlayer = player;
 }
 
-bool pawn::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          int p, bool castle[]){
-	(void) castle;
+bool pawn::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     if (board[f2][f1]->player){
 		// White move
 		return pHelper(f1,f2, t1, t2, board, p, -1, 6);
@@ -33,19 +31,18 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     vector <string> possibleMoves;
 	if(name == '.'){ return possibleMoves; }
     string moveTry;
-    bool castle[4] = {false, false, false, false};
     char spot = j + 65;
     string initSpot = string(1,spot) + char((8 - i) + 48) + " ";
 	checkPiece pawnMove(board, -1);
     for (int k = -1; k < 2; k++){
         if(turn){
             moveTry = initSpot + char(spot + k) + char((8 - i) + 49);
-            if (pawnMove.legal(moveTry, turn, castle, false)){
+            if (pawnMove.legal(moveTry, turn, false)){
                 possibleMoves.push_back(moveTry);
             }
         } else {
             moveTry = initSpot + char(spot + k) + char((8 - i) + 47);
-            if (pawnMove.legal(moveTry, turn, castle, false)){
+            if (pawnMove.legal(moveTry, turn, false)){
                 possibleMoves.push_back(moveTry);
             }
         }
@@ -56,7 +53,7 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     } else {
         moveTry = initSpot + char(spot) + char((8 - i) + 46);
     }
-    if (pawnMove.legal(moveTry, turn, castle, false)){
+    if (pawnMove.legal(moveTry, turn, false)){
         possibleMoves.push_back(moveTry);
     }
     return possibleMoves;  

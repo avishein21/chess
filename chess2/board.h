@@ -22,6 +22,7 @@ class board
         string moveName();
         void setUpGame(int botColor);
         void gameLoop(string opponent);
+        void updateCastle(piece *pieceName);
         void reviewGame();
         void endGame();
         void endGameOpts(string optLine);
@@ -31,17 +32,18 @@ class board
         bool playerTurn(checkPiece move);
         int addMat(char c);
         bool checkStop();
-        string theme[4]; // Holds colors of pieces
+        // Holds colors of pieces (default here)
+        string theme[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"}; 
         string mode; // keeps gamemode name
         //General variables for board
-        char pieceName; //Letter representing piece being moved
+        piece *movedP; //Letter representing piece being moved
         string theMove = "None"; //String holding current move
         piece *gameBoard[8][8]; //Board where game takes place
         bool turn; //True = White, False = Black
         int moves; // How many moves until 50 move rule in effect
         int allMoves;//Total moves made
         string gameMessage= ""; //Message for game over
-        bool *castle; //Castle array
+        bool castle[4]; //Castle array: White Queen/King, Black Queen/King
         bool comments; //Turned off for testing
         bool playBot = false; //Is a bot being played?
         bool compTurn = false; //Is it the bot's turn?

@@ -4,12 +4,10 @@
 #include <fstream>
 #include <vector>
 
-//theme = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"}
-
-void board::play(string giventheme[], string opponent, string gameMode, bool Dev, 
+void board::play(string givenTheme[], string opponent, string gameMode, bool Dev, 
                 int botColor){
     // Set variables for this board
-    for (int i = 0; i < 4; i++){ theme[i] = giventheme[i]; }
+    for (int i = 0; i < 4; i++){ theme[i] = givenTheme[i]; }
     mode = gameMode;
     comments = !Dev;
     // Play game
@@ -39,8 +37,8 @@ void board::setUpGame(int botColor){
     allMoves = startBoard.retMoveNum();
     pessSquare = int (startBoard.retPessant()[0] - 'A');
     turn = startBoard.retTurn();
-    castle = startBoard.retCastle();
-
+    for (int i = 0; i < 4; i++){ castle[i] = startBoard.retCastle()[i]; }
+    
     //If playing bot, determine who's move it is
     if(botColor){
         playBot = true;
@@ -92,18 +90,19 @@ bool board::checkStop(){
 
 // Makes move, and returns true if game is over, false otherwise
 bool board::playerTurn(checkPiece move){
-    if (move.legal(theMove, turn, castle, compTurn)){
-        pieceName = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->name;
+    if (move.legal(theMove, turn, compTurn)){
+        movedP = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65];
         // Update halfmove for 50 move rule
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
-        if (captured || (pieceName == 'P')){ moves = 0; } else { moves++; }
+        if (captured || (movedP->name == 'P')){ moves = 0; } else { moves++; }
         // make move
-        pessSquare = move.makeMove(theMove, gameBoard, castle, comments, theme, mode);
-        gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65]->makeSpace();
+        pessSquare = move.makeMove(theMove, gameBoard, comments, theme, mode);
+        // Update castle status
+        updateCastle(movedP);
         // Switch turn
         turn = !turn;
         // Create move name for printing
-        string moveName = setBoard::pieceName(pieceName) + " from ";
+        string moveName = setBoard::pieceName(movedP->name) + " from ";
         moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
         allMoves++;
         // Create Fen for current position
@@ -134,6 +133,32 @@ void board::printState(string prev){
         cout << "Enter move (from, to): ";
     }
 } 
+
+// Update king pieces to say if they can castle, and local castle array
+void board::updateCastle(piece *p){
+    // if king moved, it cannot castle, otherwise this does nothing
+    p->setCastle(true);
+    p->setCastle(false);
+    // check if correct rooks are still in corners, and update kings accordingly
+    // White
+    if (gameBoard[7][0]->player != 1){
+        gameBoard[7][4]->setCastle(false);
+        castle[0] = false;
+    }
+    if (gameBoard[7][7]->player != 1){
+        gameBoard[7][4]->setCastle(true);
+        castle[1] = false;
+    }
+    // Black
+    if (gameBoard[0][0]->player != 0){
+        gameBoard[0][4]->setCastle(false);
+        castle[2] = false;
+    }
+    if (gameBoard[0][7]->player != 0){
+        gameBoard[0][4]->setCastle(true);
+        castle[3] = false;
+    }
+}
 
 //Checks all forms of game over
 bool board::gameOver(checkPiece checkWin){

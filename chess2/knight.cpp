@@ -15,10 +15,8 @@ knight::knight(bool color){
     savedPlayer = player;
 }
 
-bool knight::move(int f1, int f2, int t1, int t2, piece * board[][8], 
-                          int p, bool castle[]){
+bool knight::move(int f1, int f2, int t1, int t2, piece * board[][8], int p){
     (void) p;
-    (void) castle;
     (void) board;
     if (abs(f1 - t1) == 1){
         if (abs(f2 - t2) != 2){
@@ -50,13 +48,12 @@ vector <string> knight::canMove(int i, int j, bool turn, piece * board[][8]){
 
 void knight::moveHelper(int i, int j, bool turn, int off1, int off2, 
                         vector <string>& possibleMoves, piece * board[][8]){
-    bool castle[4] = {false, false, false, false};
     string moveTry;
     char spot = j + 65;
     string initSpot = string(1,spot) + char((8 - i) + 48) + " ";
     moveTry = initSpot + char(spot + off1) + char((8 - i) + 48 + off2);
     checkPiece testKnight(board, -1);
-    if (testKnight.legal(moveTry, turn, castle, false)){
+    if (testKnight.legal(moveTry, turn, false)){
         possibleMoves.push_back(moveTry);
     }
     return;
