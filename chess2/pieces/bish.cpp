@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <stdio.h>
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include "rqbHelper.h"
 using namespace std;
 

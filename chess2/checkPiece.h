@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include "piece.h"
+#include "pieces/piece.h"
 #include "setBoard.h"
 using namespace std;
 

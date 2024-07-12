@@ -1,5 +1,5 @@
 #include "king.h"
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include <iostream>
 #include <stdio.h>
 using namespace std;

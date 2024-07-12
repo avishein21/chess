@@ -1,5 +1,5 @@
 #include "knight.h"
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include <vector>
 #include <iostream>
 #include <stdio.h>

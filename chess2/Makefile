@@ -29,47 +29,47 @@ test_unit.o: test_unit.cpp fen.h
 play.o: play.cpp piecePage.h board.h setBoard.h
 		$(CXX) $(CXXFLAGS) -c play.cpp
 
-fen.o: fen.cpp fen.h piece.h
+fen.o: fen.cpp fen.h pieces/piece.h
 	$(CXX) $(CXXFLAGS) -c fen.cpp 
 
-setBoard.o: setBoard.cpp setBoard.h piece.h fen.h
+setBoard.o: setBoard.cpp setBoard.h pieces/piece.h fen.h
 	$(CXX) $(CXXFLAGS) -c setBoard.cpp
 
 piecePage.o: piecePage.cpp piecePage.h termfuncs.h 
 		$(CXX) $(CXXFLAGS) -c piecePage.cpp
 
-checkPiece.o: checkPiece.cpp checkPiece.h knight.h termfuncs.h 
+checkPiece.o: checkPiece.cpp checkPiece.h termfuncs.h 
 		$(CXX) $(CXXFLAGS) -c checkPiece.cpp
 
-board.o: board.cpp board.h termfuncs.h checkPiece.h piece.h
+board.o: board.cpp board.h termfuncs.h checkPiece.h
 	$(CXX) $(CXXFLAGS) -c board.cpp
 
 termfuncs.o: termfuncs.cpp termfuncs.h 
 	$(CXX) $(CXXFLAGS) -c termfuncs.cpp 
 
-knight.o: knight.cpp knight.h piece.h
-	$(CXX) $(CXXFLAGS) -c knight.cpp 
+knight.o: pieces/knight.cpp pieces/knight.h pieces/piece.h
+	$(CXX) $(CXXFLAGS) -c pieces/knight.cpp 
 
-rqbHelper.o: rqbHelper.cpp rqbHelper.h piece.h 
-	$(CXX) $(CXXFLAGS) -c rqbHelper.cpp  
+rqbHelper.o: pieces/rqbHelper.cpp pieces/rqbHelper.h pieces/piece.h 
+	$(CXX) $(CXXFLAGS) -c pieces/rqbHelper.cpp  
 
-rook.o: rook.cpp rook.h piece.h 
-	$(CXX) $(CXXFLAGS) -c rook.cpp 
+rook.o: pieces/rook.cpp pieces/rook.h pieces/piece.h 
+	$(CXX) $(CXXFLAGS) -c pieces/rook.cpp 
 
-bish.o: bish.cpp bish.h piece.h
-	$(CXX) $(CXXFLAGS) -c bish.cpp 
+bish.o: pieces/bish.cpp pieces/bish.h pieces/piece.h
+	$(CXX) $(CXXFLAGS) -c pieces/bish.cpp 
 
-queen.o: queen.cpp queen.h piece.h
-	$(CXX) $(CXXFLAGS) -c queen.cpp 
+queen.o: pieces/queen.cpp pieces/queen.h pieces/piece.h
+	$(CXX) $(CXXFLAGS) -c pieces/queen.cpp 
 
-pawn.o: pawn.cpp pawn.h piece.h
-	$(CXX) $(CXXFLAGS) -c pawn.cpp 
+pawn.o: pieces/pawn.cpp pieces/pawn.h pieces/piece.h
+	$(CXX) $(CXXFLAGS) -c pieces/pawn.cpp 
 
-king.o: king.cpp king.h piece.h
-	$(CXX) $(CXXFLAGS) -c king.cpp 
+king.o: pieces/king.cpp pieces/king.h pieces/piece.h
+	$(CXX) $(CXXFLAGS) -c pieces/king.cpp 
 
-piece.o: piece.cpp piece.h 
-	$(CXX) $(CXXFLAGS) -c piece.cpp 
+piece.o: pieces/piece.cpp pieces/piece.h 
+	$(CXX) $(CXXFLAGS) -c pieces/piece.cpp 
 
 
 

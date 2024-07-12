@@ -2,7 +2,7 @@
 #define _FEN_H_
 #include <iostream>
 #include <stdio.h>
-#include "piece.h"
+#include "pieces/piece.h"
 using namespace std;
 
 class fen

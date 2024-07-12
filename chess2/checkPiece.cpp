@@ -5,11 +5,11 @@
 #include "termfuncs.h"
 #include <regex> 
 
-#include "knight.h"
-#include "rook.h"
-#include "bish.h"
-#include "queen.h"
-#include "king.h"
+#include "pieces/knight.h"
+#include "pieces/rook.h"
+#include "pieces/bish.h"
+#include "pieces/queen.h"
+#include "pieces/king.h"
 
 
 using namespace std;

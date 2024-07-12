@@ -1,10 +1,10 @@
 #include "fen.h"
-#include "knight.h"
-#include "rook.h"
-#include "bish.h"
-#include "queen.h"
-#include "king.h"
-#include "pawn.h"
+#include "pieces/knight.h"
+#include "pieces/rook.h"
+#include "pieces/bish.h"
+#include "pieces/queen.h"
+#include "pieces/king.h"
+#include "pieces/pawn.h"
 #include <iostream>
 #include <stdio.h>
 #include "setBoard.h"

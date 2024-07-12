@@ -1,9 +1,8 @@
 #include "pawn.h"
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include <vector>
 #include <iostream>
 #include <stdio.h>
-#include "termfuncs.h"
 
 using namespace std;
 

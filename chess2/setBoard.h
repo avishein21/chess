@@ -1,7 +1,7 @@
 #ifndef _SETBOARD_H_
 #define _SETBOARD_H_
 #include <iostream>
-#include "piece.h"
+#include "pieces/piece.h"
 #include "fen.h"
 using namespace std;
 

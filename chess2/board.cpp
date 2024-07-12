@@ -95,9 +95,11 @@ bool board::playerTurn(checkPiece move){
     if (move.legal(theMove, turn, compTurn)){
         movedP = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65];
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
-        if (captured || (movedP->name == 'P')){ moves = 0; } else { moves++; }
         // make move
         pessSquare = move.makeMove(theMove, gameBoard, comments, theme, mode);
+        // count move (both halfmoves and total)
+        if (captured || (movedP->name == 'P')){ moves = 0; } else { moves++; }
+        allMoves++;
         // Update castle status
         updateCastle(movedP);
         // Switch turn
@@ -105,7 +107,6 @@ bool board::playerTurn(checkPiece move){
         // Create move name for printing
         string moveName = setBoard::pieceName(movedP->name) + " from ";
         moveName += theMove.substr(0,2) + " to " + theMove.substr(3,2);
-        allMoves++;
         // Create Fen for current position
         fen currFen(gameBoard, turn, moves, allMoves, "", castle);
         // Add board to list of moves

@@ -1,5 +1,5 @@
 #include "rook.h"
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include <iostream>
 #include <stdio.h>
 #include <vector>

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include "checkPiece.h"
+#include "../checkPiece.h"
 #include "piece.h"
 using namespace std;
 
