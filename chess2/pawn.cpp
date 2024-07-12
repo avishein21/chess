@@ -33,7 +33,7 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     string moveTry;
     char spot = j + 65;
     string initSpot = string(1,spot) + char((8 - i) + 48) + " ";
-	checkPiece pawnMove(board, -1);
+	checkPiece pawnMove(board, -1); //TODO: pass in passant square
     for (int k = -1; k < 2; k++){
         if(turn){
             moveTry = initSpot + char(spot + k) + char((8 - i) + 49);

@@ -38,7 +38,9 @@ void board::setUpGame(int botColor){
     pessSquare = int (startBoard.retPessant()[0] - 'A');
     turn = startBoard.retTurn();
     for (int i = 0; i < 4; i++){ castle[i] = startBoard.retCastle()[i]; }
-    
+    // Overrule initial castle rights if rooks and kings on wrong squares
+    startCastle();
+
     //If playing bot, determine who's move it is
     if(botColor){
         playBot = true;
@@ -92,7 +94,6 @@ bool board::checkStop(){
 bool board::playerTurn(checkPiece move){
     if (move.legal(theMove, turn, compTurn)){
         movedP = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65];
-        // Update halfmove for 50 move rule
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
         if (captured || (movedP->name == 'P')){ moves = 0; } else { moves++; }
         // make move
@@ -133,6 +134,38 @@ void board::printState(string prev){
         cout << "Enter move (from, to): ";
     }
 } 
+
+void board::startCastle(){
+    for (int i = 0; i < 64; i++){
+        // All pieces not on king starting spots cannot castle
+        if (!((i == 4) || (i == 60))){
+            gameBoard[i / 8][i % 8]->setCastle(true);
+            gameBoard[i / 8][i % 8]->setCastle(false);
+        }
+    }
+    startCastleHelper(7, 1); // White king
+    startCastleHelper(0, 0); // Black king
+}
+
+void board::startCastleHelper(int row, int player){
+    if (gameBoard[row][4]->name =='K'){
+        // Wrong king, no castling
+        if (gameBoard[row][4]->player != 1){
+            gameBoard[row][4]->setCastle(true);
+            gameBoard[row][4]->setCastle(false);
+            castle[2 - (2 * player)] = false;
+            castle[3 - (2 * player)] = false;
+        } else if ((gameBoard[row][0]->player != 1) || (gameBoard[row][0]->name != 'R')){
+            // Castle Queenside no Rook
+            gameBoard[row][4]->setCastle(false);
+            castle[3 - (2 * player)] = false;
+        } else if ((gameBoard[row][7]->player != 1) || (gameBoard[row][7]->name != 'R')){
+            // Castle Kingside no Rook
+            gameBoard[row][4]->setCastle(true);
+            castle[2 - (2 * player)] = false;
+        }
+    }
+}
 
 // Update king pieces to say if they can castle, and local castle array
 void board::updateCastle(piece *p){

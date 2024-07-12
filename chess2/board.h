@@ -22,6 +22,9 @@ class board
         string moveName();
         void setUpGame(int botColor);
         void gameLoop(string opponent);
+        void startCastle();
+        void startCastleHelper(int row, int player);
+
         void updateCastle(piece *pieceName);
         void reviewGame();
         void endGame();
@@ -32,10 +35,10 @@ class board
         bool playerTurn(checkPiece move);
         int addMat(char c);
         bool checkStop();
+
         // Holds colors of pieces (default here)
         string theme[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"}; 
         string mode; // keeps gamemode name
-        //General variables for board
         piece *movedP; //Letter representing piece being moved
         string theMove = "None"; //String holding current move
         piece *gameBoard[8][8]; //Board where game takes place
@@ -53,6 +56,7 @@ class board
         fen reset;
         unordered_map<string, bool> hashMoves; //All moves to track 3 fold rep
         vector <fen> boards; //FENs of all boards (and more info)
+        // TODO: variables for 2 king positions
 };
 
 #endif

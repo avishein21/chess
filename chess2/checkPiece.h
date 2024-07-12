@@ -35,12 +35,10 @@ class checkPiece
         void translateMove(string theMove);
         // Says if legal move for this piece type
         bool pieceMove(piece * test);
-        // Gets corresponding points per piece
-        int piecePoints(char pieceName);
 
         string errMess = ""; //Error message
         int pessSquare = -1;
-        piece *board[8][8]; //Board where game takes place
+        piece *board[8][8]; //Local version of board for testing
         int from1, from2, to1, to2; //Locations
         //Normal theme
         string thm[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"};
