@@ -1,0 +1,2 @@
+clang++ -g3 -Wall -Wextra -Wpedantic -Wshadow -O2 -std=c++11 -c play.cpp
+clang++ -g3 -Wall -Wextra -Wpedantic -Wshadow -O2 -std=c++11 -c board.cpp

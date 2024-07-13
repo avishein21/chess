@@ -3,6 +3,7 @@
 #include "setBoard.h"
 #include <fstream>
 #include <vector>
+#include "chessBot.h"
 
 void board::play(string givenTheme[], string opponent, string gameMode, bool Dev, 
                 int botColor){
@@ -11,14 +12,14 @@ void board::play(string givenTheme[], string opponent, string gameMode, bool Dev
     mode = gameMode;
     comments = !Dev;
     // Play game
-    setUpGame(botColor);
+    setUpGame(botColor, opponent);
     gameLoop(opponent);
     reviewGame();
     resetGame();
 }
 
 //Sets multiple variables for game
-void board::setUpGame(int botColor){
+void board::setUpGame(int botColor, string opponent){
     //Get initial position
     if(mode == "Custom Position"){
         //Delete default board and reset with custom
@@ -61,14 +62,25 @@ void board::setUpGame(int botColor){
 
 //Main Game Loop
 void board::gameLoop(string opponent){
-    (void) opponent;
-    while (getline(cin, theMove)){
+    chessBot robot(turn, opponent);
+    // Get first move
+    if (compTurn){
+        theMove = robot.botMove(gameBoard);
+    } else {
+        getline(cin, theMove);
+    }
+    while (!checkStop()){
         screen_clear();
         // Check if player wants to stop game
-        if (checkStop()) { break; }
         checkPiece move(gameBoard, pessSquare);
         // Make move if possible
         if (playerTurn(move)) { break; }
+        // Get new move
+        if (compTurn){
+            theMove = robot.botMove(gameBoard);
+        } else {
+            getline(cin, theMove);
+        }
     }
 }
 
@@ -93,6 +105,9 @@ bool board::checkStop(){
 // Makes move, and returns true if game is over, false otherwise
 bool board::playerTurn(checkPiece move){
     if (move.legal(theMove, turn, compTurn)){
+        if (playBot){
+            compTurn = !compTurn;
+        }
         movedP = gameBoard[7 - (theMove[1] - 49)][theMove[0] - 65];
         bool captured = (gameBoard[7 - (theMove[4] - 49)][theMove[3] - 65]->player != 2);
         // make move

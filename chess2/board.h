@@ -20,7 +20,7 @@ class board
         bool gameOver(checkPiece move);
         void printState(string prev);
         string moveName();
-        void setUpGame(int botColor);
+        void setUpGame(int botColor, string opp);
         void gameLoop(string opponent);
         void startCastle();
         void startCastleHelper(int row, int player);

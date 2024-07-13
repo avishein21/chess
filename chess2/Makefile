@@ -6,9 +6,9 @@ CXX      = clang++
 CXXFLAGS = -g3 -Wall -Wextra -Wpedantic -Wshadow -O2 -std=c++11
 
 Chess: play.o board.o termfuncs.o checkPiece.o knight.o rook.o bish.o \
-	setBoard.o piece.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o
+	setBoard.o piece.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o chessbot.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o Play play.o board.o termfuncs.o checkPiece.o \
-	knight.o setBoard.o piece.o rook.o bish.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o
+	knight.o setBoard.o piece.o rook.o bish.o queen.o pawn.o king.o piecePage.o fen.o rqbHelper.o chessbot.o
 
 Unit_tests: test_unit.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o Unit_tests test_unit.o 
@@ -61,6 +61,8 @@ king.o: pieces/king.cpp pieces/king.h pieces/piece.h
 piece.o: pieces/piece.cpp pieces/piece.h 
 	$(CXX) $(CXXFLAGS) -c pieces/piece.cpp 
 
+chessbot.o: chessbot.cpp chessbot.h
+	$(CXX) $(CXXFLAGS) -c chessbot.cpp 
 
 # remove executables, object code, and temporary files from the current folder 
 # -- the executable created by unit_test is called a.out
