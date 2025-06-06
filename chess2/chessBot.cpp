@@ -13,34 +13,33 @@ using namespace std::this_thread; // sleep_for, sleep_until
 using namespace std::chrono; // nanoseconds, system_clock, seconds
 
 
-chessBot::chessBot(bool t, string opp){
+chessBot::chessBot(string opp){
     if (opp == "Randall"){ depth = 0; } 
     else if (opp == "Tammy"){  depth = 1; } 
     else { depth = 2; }
-    turn = t;
 }
 
-string chessBot::botMove(piece *board[][8]){
-    if (depth == 0) { return randall(board); } 
+string chessBot::botMove(piece *board[][8], bool turn){
+    if (depth == 0) { return randall(board, turn); } 
     else { return engine(board, turn, depth).move; }
 }
 
 // Gets a random move from the all moves vector
-string chessBot::randall(piece *board[][8]){
+string chessBot::randall(piece *board[][8], bool turn){
     sleep_until(system_clock::now() + seconds(1));
     srand(time(0));
-    vector <string> allMovables = allMoves(board);
+    vector <string> allMovables = allMoves(board, turn);
     int move = rand() % allMovables.size();
     return allMovables.at(move);
 }
 
 // Gets a move and its associated value for given depth
-numMove chessBot::engine(piece *board[][8], bool t, int deep){
+numMove chessBot::engine(piece *board[][8], bool turn, int deep){
     // get all moves
-    vector <string> allMovables = allMoves(board);
+    vector <string> allMovables = allMoves(board, turn);
     vector <numMove> moveRatings;
     // -1 for black, 1 for white
-    int mult = t * 2 - 1;
+    int mult = turn * 2 - 1;
 
     // All future moves and their values
     vector<string>::iterator it;
@@ -52,8 +51,9 @@ numMove chessBot::engine(piece *board[][8], bool t, int deep){
         // make move on board
         copiedMove.makeMove(*it, copyBoard, false, thm, "");
         // if checkmate or stalemate, return move
-        if (!copiedMove.canMove(!t)){
-            if (copiedMove.canCheck(!t)){
+        if (!copiedMove.canMove(turn)){
+            cout << "cannot move after" << *it << "\n";
+            if (copiedMove.canCheck(!turn)){
                 struct numMove tempMove = { CHECKMATE, *it};
                 return tempMove;
             } else {
@@ -69,8 +69,9 @@ numMove chessBot::engine(piece *board[][8], bool t, int deep){
                 moveRatings.push_back(tempMove);
             } else {
                 // see what oppenent gives
-                numMove oppMove = engine(copyBoard, !t, deep - 1);
+                numMove oppMove = engine(copyBoard, !turn, deep - 1);
                 oppMove.num *= -1;
+                oppMove.move = *it;
                 moveRatings.push_back(oppMove);
             }
         }
@@ -91,7 +92,8 @@ numMove chessBot::engine(piece *board[][8], bool t, int deep){
     return ret;
 }
 
-vector <string> chessBot::allMoves(piece *board[][8]){
+// returns all possible moves
+vector <string> chessBot::allMoves(piece *board[][8], bool turn){
     vector <string> pMoves;
     vector <string> allMovables;
     for (int i = 0; i < 64; i++){
@@ -106,57 +108,3 @@ vector <string> chessBot::allMoves(piece *board[][8]){
     }
     return allMovables;
 }
-
-// numMove chessBot::engine(bool turn, piece board[][8], int depth){
-//     checkPiece testPiece(board, "");
-//     bool castle[] = {false, false, false, false};
-//     int worstCase = INT_MAX;
-//     int bestCase = INT_MIN;
-//     int staleMate = INT16_MAX;
-//     numMove returnMove;
-//     string bestMove;
-//     vector <numMove> possibilities;
-//     vector <string> allMovables = allMoves(turn, board);
-//     int length = allMovables.size();
-//     if (turn){
-//         worstCase = INT_MIN;
-//         bestCase = INT_MAX;
-//         staleMate = INT16_MIN;
-//     }
-//     //test mate in 1
-//     int boardEval = bestOneMove(turn, board, &bestMove, worstCase, bestCase, 
-//                                 staleMate);   
-//     if(boardEval == bestCase){
-//         returnMove.move = bestMove;
-//         returnMove.num = boardEval;
-//         return returnMove;
-//     }
-//     for (int i = 0; i < length; i++){
-//         piece tempBoard[8][8];
-//         for(int j = 0; j < 64; j++){
-//             tempBoard[j%8][j/8] = board[j%8][j/8];
-//         }
-//         string theme[1] = {"bogus"};
-//         testPiece.makeMove(allMovables.at(i), tempBoard, castle, false, theme, "Classic");
-//         if(depth == 1){
-//             returnMove.num = bestOneMove(!turn, tempBoard, &bestMove, bestCase, worstCase, staleMate);       
-//         } else {
-//             returnMove = engine(!turn, tempBoard, depth - 1);
-//         }
-//         returnMove.move = allMovables.at(i);
-//         if(possibilities.empty()){
-//             possibilities.push_back(returnMove);
-//         } else if (possibilities.at(0).num == returnMove.num){
-//             possibilities.push_back(returnMove);
-//         } else if (turn and (possibilities.at(0).num < returnMove.num)){
-//             possibilities.clear();
-//             possibilities.push_back(returnMove);
-//         } else if(!turn and (possibilities.at(0).num > returnMove.num)){
-//             possibilities.clear();
-//             possibilities.push_back(returnMove);
-//         }
-//     }
-//     int numPosMoves = possibilities.size();
-//     return possibilities.at(rand() % numPosMoves);
-// }
-

@@ -16,17 +16,16 @@ class chessBot
 { 
     
     public:
-        chessBot(bool t, string opponent);
-        string botMove(piece *board[][8]);
+        chessBot(string opponent);
+        string botMove(piece *board[][8], bool turn);
 
     private:
         int depth;
-        bool turn;
         string thm[4]; //placeholder for board themes 
-        string randall(piece *board[][8]);
+        string randall(piece *board[][8], bool turn);
         numMove engine(piece *board[][8], bool turn, int depth);
 
-        vector <string> allMoves(piece *board[][8]);
+        vector <string> allMoves(piece *board[][8], bool turn);
         int boardScore(piece *board[][8]);
 
         // numMove engine(bool turn, piece board[][8], int depth);

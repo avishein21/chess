@@ -63,10 +63,10 @@ void board::setUpGame(int botColor, string opponent){
 
 //Main Game Loop
 void board::gameLoop(string opponent){
-    chessBot robot(compTurn, opponent);
+    chessBot robot(opponent);
     // Get first move
     if (compTurn){
-        theMove = robot.botMove(gameBoard);
+        theMove = robot.botMove(gameBoard, turn);
     } else {
         getline(cin, theMove);
     }
@@ -78,7 +78,7 @@ void board::gameLoop(string opponent){
         if (playerTurn(move)) { break; }
         // Get new move
         if (compTurn){
-            theMove = robot.botMove(gameBoard);
+            theMove = robot.botMove(gameBoard, turn);
         } else {
             getline(cin, theMove);
         }
