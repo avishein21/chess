@@ -4,11 +4,7 @@
 #include <cstdlib>
 #include <thread>
 #include "setBoard.h"
-// #include "king.h"
-// #include "knight.h"
-// #include "rook.h"
-// #include "bish.h"
-// #include "pawn.h"
+
 const int CHECKMATE = 100000;
 const int STALEMATE = -10000;
 
@@ -26,40 +22,58 @@ chessBot::chessBot(bool t, string opp){
 
 string chessBot::botMove(piece *board[][8]){
     if (depth == 0) { return randall(board); } 
-    else if (depth == 1) { return bestOneMove(board); }
-    else { return ""; }
+    else { return engine(board, turn, depth).move; }
 }
-
 
 // Gets a random move from the all moves vector
 string chessBot::randall(piece *board[][8]){
-    // Sleep
-    // sleep_until(system_clock::now() + seconds(1));
-    // Get a random move
+    sleep_until(system_clock::now() + seconds(1));
     srand(time(0));
     vector <string> allMovables = allMoves(board);
     int move = rand() % allMovables.size();
     return allMovables.at(move);
 }
 
-// Gets a random move from the all moves vector
-string chessBot::bestOneMove(piece *board[][8]){
-    piece *copyBoard[8][8];
+// Gets a move and its associated value for given depth
+numMove chessBot::engine(piece *board[][8], bool t, int deep){
+    // get all moves
     vector <string> allMovables = allMoves(board);
     vector <numMove> moveRatings;
-    vector<string>::iterator it;
     // -1 for black, 1 for white
-    int mult = turn * 2 - 1;
+    int mult = t * 2 - 1;
+
+    // All future moves and their values
+    vector<string>::iterator it;
     for (it = allMovables.begin(); it != allMovables.end(); it++) {
-        // make board copy
+        // make board copy and make move on copy
+        piece *copyBoard[8][8];
         setBoard::copyBoard(board, copyBoard);
         checkPiece copiedMove(copyBoard, -1);
-        string thm[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"};
+        // make move on board
         copiedMove.makeMove(*it, copyBoard, false, thm, "");
-        // TODO: check if board is checkmate or stalemate
-        int points = setBoard::boardPoints(copyBoard) * mult;
-        struct numMove t = { points, *it};
-        moveRatings.push_back(t);
+        // if checkmate or stalemate, return move
+        if (!copiedMove.canMove(!t)){
+            if (copiedMove.canCheck(!t)){
+                struct numMove tempMove = { CHECKMATE, *it};
+                return tempMove;
+            } else {
+                struct numMove tempMove = { STALEMATE, *it};
+                moveRatings.push_back(tempMove);
+            }
+        } else {
+            // TODO: alpha beta here
+            if (deep == 1){
+                // TODO: if stalemate, points = STALEMATE
+                int points = setBoard::boardPoints(copyBoard) * mult;
+                struct numMove tempMove = { points, *it};
+                moveRatings.push_back(tempMove);
+            } else {
+                // see what oppenent gives
+                numMove oppMove = engine(copyBoard, !t, deep - 1);
+                oppMove.num *= -1;
+                moveRatings.push_back(oppMove);
+            }
+        }
     }
     // get max value
     int maxVal = CHECKMATE * -1;
@@ -73,7 +87,8 @@ string chessBot::bestOneMove(piece *board[][8]){
         if(moveRatings[i].num == maxVal){ allMovables.emplace_back(moveRatings[i].move); }
     }
     int move = rand() % allMovables.size();
-    return allMovables.at(move);
+    struct numMove ret = { maxVal, allMovables.at(move)};
+    return ret;
 }
 
 vector <string> chessBot::allMoves(piece *board[][8]){
@@ -91,87 +106,6 @@ vector <string> chessBot::allMoves(piece *board[][8]){
     }
     return allMovables;
 }
-
-    // for (int j = 0; j < allMovables.size(); j++){
-    //     cout << allMovables[j] << endl;
-    // }
-
-// int chessBot::updateBestMove(int moveLess, int moveMore, int i, bool turn,
-//                             vector <string>& holdMove, vector <string> allMove){
-//     if(moveLess == moveMore){
-//         holdMove.push_back(allMove.at(i));
-//         return moveLess;
-//     }
-//     //White sees if the new move is greater
-//     if (turn){
-//         if(moveLess < moveMore){
-//             holdMove.clear();
-//             holdMove.push_back(allMove.at(i));
-//             return moveMore;
-//         }
-//         return moveLess;
-//     } 
-//     //Black sees if the new move is greater
-//     if(moveLess < moveMore){
-//         holdMove.clear();
-//         holdMove.push_back(allMove.at(i));
-//         return moveLess;
-//     }
-//     return moveMore;
-// }
-
-// int chessBot::bestOneMove(bool turn, piece board[][8], string *moveName,
-//                             int startComp, int bestCase, int staleMate){
-//     vector <string> allMovables = allMoves(turn, board);
-//     int length = allMovables.size();
-//     checkPiece testPiece(board, "");
-//     int mostPts = startComp;
-//     vector <string> holdMove;
-//     for(int i = 0; i < length; i++){
-//         //temp board removable? 
-//         piece tempBoard[8][8];
-//         for(int j = 0; j < 64; j++){
-//             tempBoard[j%8][j/8] = board[j%8][j/8];
-//         }
-//         bool castle[] = {false, false, false, false};
-//         string theme[] = {"bogus"};
-//         testPiece.makeMove(allMovables.at(i), tempBoard, castle, false, 
-//                             theme, "Classic");
-//         //Checkmate or stalemate
-//         if (!testPiece.canMove(!turn)){
-//             if(testPiece.canCheck(!turn)){
-//                 //Checkmate
-//                 holdMove.clear();
-//                 holdMove.push_back(allMovables.at(i));
-//                 mostPts = bestCase;
-//                 break;
-//             } else {
-//                 //Stalemate
-//                 int testPts = staleMate;
-//                 mostPts = updateBestMove(mostPts, testPts, i, turn, holdMove,
-//                         allMovables);
-//             }
-//         } else {
-//             int testPts = setBoard::boardPoints(tempBoard);
-//             if(turn){
-//                 mostPts = updateBestMove(mostPts, testPts, i, turn, holdMove,
-//                                         allMovables);
-//             } else {
-//                 mostPts = updateBestMove(testPts, mostPts, i, turn, holdMove,
-//                         allMovables);
-//             }
-//         }
-//     }
-//     srand (time(NULL));
-//     if (holdMove.size() != 0){
-//         int move;
-//         move = rand() % holdMove.size();
-//         *moveName = holdMove.at(move);
-//         return mostPts;
-//     }
-//     //Should not be reached (stalemate would have already been called)
-//     return startComp;
-// }
 
 // numMove chessBot::engine(bool turn, piece board[][8], int depth){
 //     checkPiece testPiece(board, "");
@@ -226,34 +160,3 @@ vector <string> chessBot::allMoves(piece *board[][8]){
 //     return possibilities.at(rand() % numPosMoves);
 // }
 
-
-// string chessBot::tammy(bool turn, piece board[][8]){
-//     sleep_until(system_clock::now() + seconds(1));
-//     string bestMove;
-//     if(turn){
-//         //White best move in 1
-//         bestOneMove(turn, board, &bestMove, INT_MIN, INT_MAX, INT16_MIN);
-//         return bestMove;
-//     } else {
-//         //Black best move in 1
-//         bestOneMove(turn, board, &bestMove, INT_MAX, INT_MIN, INT16_MAX);
-//         return bestMove;
-//     }
-// }
-
-// string chessBot::reggie(bool turn, piece board[][8]){
-//     sleep_until(system_clock::now() + seconds(1));
-//     return engine(turn, board, 1).move;
-// }
-
-// string chessBot::parker(bool turn, piece board[][8]){
-//     return engine(turn, board, 2).move;
-// }
-
-// string chessBot::francis(bool turn, piece board[][8]){
-//     return engine(turn, board, 3).move;
-// }
-
-// string chessBot::gerald(bool turn, piece board[][8]){
-//     return engine(turn, board, 4).move;
-// }

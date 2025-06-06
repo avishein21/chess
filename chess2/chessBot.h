@@ -22,8 +22,9 @@ class chessBot
     private:
         int depth;
         bool turn;
+        string thm[4]; //placeholder for board themes 
         string randall(piece *board[][8]);
-        string bestOneMove(piece *board[][8]);
+        numMove engine(piece *board[][8], bool turn, int depth);
 
         vector <string> allMoves(piece *board[][8]);
         int boardScore(piece *board[][8]);
