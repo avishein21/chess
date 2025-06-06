@@ -88,6 +88,13 @@ fen::fen(){
     halfFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 }
 
+string fen::fenFromBoard(piece * board[][8]){
+    bool castle[4] = {true, true, true, true};
+    fen f(board, true, 0, 0, "", castle);
+    return f.retHalfFen();
+}
+
+
 //returns board part of fen
 string fen::retHalfFen(){
     if (halfFen != ""){

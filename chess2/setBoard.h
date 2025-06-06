@@ -22,6 +22,8 @@ class setBoard
         static string addPiece(string line, piece * useBoard[][8]);
         static piece * makePiece(char let, bool color);
         static bool validFen(string testString, fen &makeFen);
+        static string boardFen(piece * board[][8]);
+        static void copyBoard(piece * original[][8], piece * copy[][8]);
 
     private:
         static bool delFen(fen deleting);

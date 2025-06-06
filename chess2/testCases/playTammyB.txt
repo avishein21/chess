@@ -1,0 +1,9 @@
+Choose Player
+Tammy
+2
+Play
+E7 E5
+D7 D5
+B8 C6
+Quit
+Quit

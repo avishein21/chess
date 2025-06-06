@@ -9,6 +9,8 @@
 // #include "rook.h"
 // #include "bish.h"
 // #include "pawn.h"
+const int CHECKMATE = 100000;
+const int STALEMATE = -10000;
 
 using namespace std;
 using namespace std::this_thread; // sleep_for, sleep_until
@@ -16,16 +18,15 @@ using namespace std::chrono; // nanoseconds, system_clock, seconds
 
 
 chessBot::chessBot(bool t, string opp){
-    if (opp == "Randall"){
-        depth = 0;
-    } else {
-        depth = 2;
-    }
+    if (opp == "Randall"){ depth = 0; } 
+    else if (opp == "Tammy"){  depth = 1; } 
+    else { depth = 2; }
     turn = t;
 }
 
 string chessBot::botMove(piece *board[][8]){
     if (depth == 0) { return randall(board); } 
+    else if (depth == 1) { return bestOneMove(board); }
     else { return ""; }
 }
 
@@ -33,9 +34,44 @@ string chessBot::botMove(piece *board[][8]){
 // Gets a random move from the all moves vector
 string chessBot::randall(piece *board[][8]){
     // Sleep
-    sleep_until(system_clock::now() + seconds(1));
+    // sleep_until(system_clock::now() + seconds(1));
     // Get a random move
+    srand(time(0));
     vector <string> allMovables = allMoves(board);
+    int move = rand() % allMovables.size();
+    return allMovables.at(move);
+}
+
+// Gets a random move from the all moves vector
+string chessBot::bestOneMove(piece *board[][8]){
+    piece *copyBoard[8][8];
+    vector <string> allMovables = allMoves(board);
+    vector <numMove> moveRatings;
+    vector<string>::iterator it;
+    // -1 for black, 1 for white
+    int mult = turn * 2 - 1;
+    for (it = allMovables.begin(); it != allMovables.end(); it++) {
+        // make board copy
+        setBoard::copyBoard(board, copyBoard);
+        checkPiece copiedMove(copyBoard, -1);
+        string thm[4] = {"\033[1;30m", "\033[0m", "\033[1;100m", "\033[47m"};
+        copiedMove.makeMove(*it, copyBoard, false, thm, "");
+        // TODO: check if board is checkmate or stalemate
+        int points = setBoard::boardPoints(copyBoard) * mult;
+        struct numMove t = { points, *it};
+        moveRatings.push_back(t);
+    }
+    // get max value
+    int maxVal = CHECKMATE * -1;
+    for (int i = 0; i < (int) moveRatings.size(); i++){
+        int tryMax = moveRatings[i].num;
+        if (tryMax > maxVal){ maxVal = tryMax; }
+    }
+    allMovables.clear();
+    // get all moves of max value
+    for (int i = 0; i < (int) moveRatings.size(); i++){
+        if(moveRatings[i].num == maxVal){ allMovables.emplace_back(moveRatings[i].move); }
+    }
     int move = rand() % allMovables.size();
     return allMovables.at(move);
 }
@@ -51,10 +87,14 @@ vector <string> chessBot::allMoves(piece *board[][8]){
         }
         // append moves
         allMovables.insert(allMovables.end(), pMoves.begin(), pMoves.end());
+        pMoves.clear();
     }
     return allMovables;
 }
-// }
+
+    // for (int j = 0; j < allMovables.size(); j++){
+    //     cout << allMovables[j] << endl;
+    // }
 
 // int chessBot::updateBestMove(int moveLess, int moveMore, int i, bool turn,
 //                             vector <string>& holdMove, vector <string> allMove){

@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "ostream": "cpp",
+        "__locale": "cpp",
+        "regex": "cpp",
+        "string_view": "cpp",
+        "typeinfo": "cpp",
+        "new": "cpp",
+        "__assertion_handler": "cpp",
+        "__split_buffer": "cpp",
+        "__threading_support": "cpp",
+        "ios": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "streambuf": "cpp",
+        "tuple": "cpp"
+    }
+}

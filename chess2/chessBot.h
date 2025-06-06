@@ -23,7 +23,11 @@ class chessBot
         int depth;
         bool turn;
         string randall(piece *board[][8]);
+        string bestOneMove(piece *board[][8]);
+
         vector <string> allMoves(piece *board[][8]);
+        int boardScore(piece *board[][8]);
+
         // numMove engine(bool turn, piece board[][8], int depth);
         // int bestOneMove(bool turn, piece board[][8], string *moveName, 
         //                 int startComp, int bestCase, int staleMate);

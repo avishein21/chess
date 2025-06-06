@@ -20,6 +20,7 @@ void board::play(string givenTheme[], string opponent, string gameMode, bool Dev
 
 //Sets multiple variables for game
 void board::setUpGame(int botColor, string opponent){
+    (void) opponent;
     //Get initial position
     if(mode == "Custom Position"){
         //Delete default board and reset with custom
@@ -62,7 +63,7 @@ void board::setUpGame(int botColor, string opponent){
 
 //Main Game Loop
 void board::gameLoop(string opponent){
-    chessBot robot(turn, opponent);
+    chessBot robot(compTurn, opponent);
     // Get first move
     if (compTurn){
         theMove = robot.botMove(gameBoard);

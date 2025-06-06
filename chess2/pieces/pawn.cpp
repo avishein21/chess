@@ -32,14 +32,15 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
     string moveTry;
     char spot = j + 65;
     string initSpot = string(1,spot) + char((8 - i) + 48) + " ";
-	checkPiece pawnMove(board, -1); //TODO: pass in passant square
     for (int k = -1; k < 2; k++){
         if(turn){
+            checkPiece pawnMove(board, -1); //TODO: pass in passant square
             moveTry = initSpot + char(spot + k) + char((8 - i) + 49);
             if (pawnMove.legal(moveTry, turn, false)){
                 possibleMoves.push_back(moveTry);
             }
         } else {
+            checkPiece pawnMove(board, -1); //TODO: pass in passant square
             moveTry = initSpot + char(spot + k) + char((8 - i) + 47);
             if (pawnMove.legal(moveTry, turn, false)){
                 possibleMoves.push_back(moveTry);
@@ -47,6 +48,7 @@ vector <string> pawn::canMove(int i, int j, bool turn, piece * board[][8]){
         }
     }
     //try moving 2 spaces up
+    checkPiece pawnMove(board, -1); //TODO: pass in passant square
     if(turn){
         moveTry = initSpot + char(spot) + char((8 - i) + 50);
     } else {

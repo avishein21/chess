@@ -13,6 +13,7 @@ class fen
             string pessant, bool castle[]);
         fen(string fenString);
         fen(); //return classic board
+        static string fenFromBoard(piece * board[][8]);
         string retHalfFen(); //Get board string
         string makeFenString(); //Get full fen
         //Take board and turn it into current Fen's board

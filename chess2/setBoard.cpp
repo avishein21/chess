@@ -220,6 +220,11 @@ bool setBoard::validBoard(string boardStr){
     return true;
 }
 
+void setBoard::copyBoard(piece * original[][8], piece * copy[][8]){
+    string s = fen::fenFromBoard(original);
+    setFullBoard(s, copy);
+}
+
 
 //Takes a valid string and updates the board to match
 void setBoard::setFullBoard(string boardString, piece * useBoard[][8]){
