@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <thread>
 #include "setBoard.h"
+// #include <chrono>
+
 
 const int CHECKMATE = 100000;
 const int STALEMATE = -10000;
@@ -16,17 +18,24 @@ using namespace std::chrono; // nanoseconds, system_clock, seconds
 chessBot::chessBot(string opp){
     if (opp == "Randall"){ depth = 0; } 
     else if (opp == "Tammy"){  depth = 1; } 
-    else { depth = 2; }
+    else if (opp == "Reggie"){  depth = 2; } 
+    else if (opp == "Parker"){  depth = 3; } 
+    else if (opp == "Francis"){  depth = 4; } 
+    else if (opp == "Gerald"){  depth = 5; } 
+    else {depth = 1; }
 }
 
 string chessBot::botMove(piece *board[][8], bool turn){
-    if (depth == 0) { return randall(board, turn); } 
-    else { return engine(board, turn, depth).move; }
+    system_clock::time_point t = system_clock::now();
+    string move;
+    if (depth == 0) { move = randall(board, turn); } 
+    else { move = engine(board, turn, depth).move; }
+    sleep_until(t + seconds(1));
+    return move;
 }
 
 // Gets a random move from the all moves vector
 string chessBot::randall(piece *board[][8], bool turn){
-    sleep_until(system_clock::now() + seconds(1));
     srand(time(0));
     vector <string> allMovables = allMoves(board, turn);
     int move = rand() % allMovables.size();
@@ -50,10 +59,11 @@ numMove chessBot::engine(piece *board[][8], bool turn, int deep){
         checkPiece copiedMove(copyBoard, -1);
         // make move on board
         copiedMove.makeMove(*it, copyBoard, false, thm, "");
-        // if checkmate or stalemate, return move
-        if (!copiedMove.canMove(turn)){
-            cout << "cannot move after" << *it << "\n";
-            if (copiedMove.canCheck(!turn)){
+        checkPiece check_for_mate(copyBoard, -1);
+
+        // if checkmate or stalemate, add new rating for move
+        if (!check_for_mate.canMove(!turn)){
+            if (check_for_mate.canCheck(!turn)){
                 struct numMove tempMove = { CHECKMATE, *it};
                 return tempMove;
             } else {

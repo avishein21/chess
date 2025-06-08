@@ -18,6 +18,7 @@
         "istream": "cpp",
         "locale": "cpp",
         "streambuf": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "__config": "cpp"
     }
 }
